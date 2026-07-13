@@ -1,156 +1,889 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  ArrowRight,
-  Code2,
-  Rocket,
-  Workflow,
+  ArrowUpRight,
+  X,
   Sparkles,
-  Gauge,
-  Headphones,
+  Figma,
+  Code2,
   Layers,
-  ShieldCheck,
-  Quote,
-  Plus,
-  Minus,
-  MessageCircle,
+  ShoppingBag,
+  Globe,
+  Palette,
+  MousePointer2,
   Instagram,
   Linkedin,
   Github,
+  MessageCircle,
+  Play,
 } from "lucide-react";
-import { useState } from "react";
-import heroPortrait from "@/assets/hero-portrait.jpg";
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
+import phlavioAsset from "@/assets/phlavio.jpg.asset.json";
+import projectAAsset from "@/assets/project-a.mp4.asset.json";
+import projectBAsset from "@/assets/project-b.mp4.asset.json";
+
+const PHOTO = phlavioAsset.url;
+const VIDEO_A = projectAAsset.url;
+const VIDEO_B = projectBAsset.url;
+
+const WHATSAPP =
+  "https://wa.me/5500000000000?text=" +
+  encodeURIComponent("Olá Phlavio! Vim pelo seu portfólio e quero um orçamento.");
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const WHATSAPP =
-  "https://wa.me/5500000000000?text=" +
-  encodeURIComponent(
-    "Olá Phlavio! Vim pelo seu site e quero solicitar um orçamento.",
-  );
-
 function Index() {
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans">
+    <div className="relative min-h-screen overflow-x-hidden text-brown-deep">
+      <AmbientBackground />
+      <CustomCursor />
       <Nav />
       <Hero />
-      <Services />
-      <Stages />
-      <WhyMe />
+      <Marquee />
+      <About />
+      <Projects />
+      <Stats />
+      <Process />
       <Testimonials />
-      <Portfolio />
-      <FAQ />
       <FinalCTA />
       <Footer />
-      <WhatsAppFAB />
     </div>
   );
 }
 
-function Nav() {
+/* ---------------------------------------------------------------- */
+/* Ambient background — organic blurred shapes + subtle grain       */
+/* ---------------------------------------------------------------- */
+function AmbientBackground() {
+  const { scrollYProgress } = useScroll();
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -240]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 180]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, -420]);
+
   return (
-    <header className="fixed top-0 inset-x-0 z-40 border-b border-border/60 backdrop-blur-xl bg-background/70">
-      <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-        <a href="#top" className="flex items-center gap-2 font-display font-bold text-lg">
-          <span className="size-8 rounded-lg bg-gradient-primary shadow-glow grid place-items-center">
-            <Code2 className="size-4 text-white" />
-          </span>
-          <span>phlavio<span className="text-gradient">.dev</span></span>
+    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden surface-off">
+      <motion.div
+        style={{ y: y1 }}
+        className="absolute -top-40 -left-32 h-[46rem] w-[46rem] rounded-full blur-3xl opacity-70"
+      >
+        <div className="h-full w-full rounded-full bg-[radial-gradient(circle_at_30%_30%,#F4EFE8,transparent_60%)]" />
+      </motion.div>
+      <motion.div
+        style={{ y: y2 }}
+        className="absolute top-[40%] -right-40 h-[38rem] w-[38rem] rounded-full blur-3xl opacity-60"
+      >
+        <div className="h-full w-full rounded-full bg-[radial-gradient(circle_at_50%_50%,#ECECEC,transparent_65%)]" />
+      </motion.div>
+      <motion.div
+        style={{ y: y3 }}
+        className="absolute top-[75%] left-[20%] h-[32rem] w-[32rem] rounded-full blur-3xl opacity-50"
+      >
+        <div className="h-full w-full rounded-full bg-[radial-gradient(circle_at_50%_50%,#E9DFD1,transparent_60%)]" />
+      </motion.div>
+      <div className="absolute inset-0 noise-bg opacity-[0.18] mix-blend-multiply" />
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------- */
+/* Custom magnetic cursor                                            */
+/* ---------------------------------------------------------------- */
+function CustomCursor() {
+  const x = useMotionValue(-100);
+  const y = useMotionValue(-100);
+  const sx = useSpring(x, { stiffness: 500, damping: 40, mass: 0.4 });
+  const sy = useSpring(y, { stiffness: 500, damping: 40, mass: 0.4 });
+  const [variant, setVariant] = useState<"default" | "hover" | "media">("default");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    const move = (e: MouseEvent) => {
+      x.set(e.clientX);
+      y.set(e.clientY);
+    };
+    const over = (e: MouseEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (!t) return;
+      if (t.closest("[data-cursor='media']")) setVariant("media");
+      else if (t.closest("a, button, [data-cursor='hover']")) setVariant("hover");
+      else setVariant("default");
+    };
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mouseover", over);
+    return () => {
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseover", over);
+    };
+  }, [x, y]);
+
+  const size = variant === "media" ? 88 : variant === "hover" ? 56 : 14;
+  const label = variant === "media" ? "PLAY" : "";
+
+  return (
+    <motion.div
+      style={{ x: sx, y: sy }}
+      className="pointer-events-none fixed left-0 top-0 z-[100] hidden md:block"
+    >
+      <motion.div
+        animate={{ width: size, height: size, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="-translate-x-1/2 -translate-y-1/2 rounded-full bg-brown-deep text-[10px] font-medium uppercase tracking-[0.2em] text-[color:var(--off-white)] mix-blend-difference flex items-center justify-center"
+      >
+        {label}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ---------------------------------------------------------------- */
+/* Nav                                                               */
+/* ---------------------------------------------------------------- */
+function Nav() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return (
+    <motion.header
+      initial={{ y: -40, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4"
+    >
+      <nav
+        className={`flex w-full max-w-6xl items-center justify-between rounded-full px-5 py-3 transition-all duration-500 ${
+          scrolled ? "glass shadow-soft" : "bg-transparent"
+        }`}
+      >
+        <a href="#top" className="flex items-center gap-2 text-brown-deep">
+          <span className="inline-block h-6 w-6 rounded-full bg-brown-deep" />
+          <span className="text-sm font-semibold tracking-tight">Phlavio Allves</span>
         </a>
-        <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-          <a href="#servicos" className="hover:text-foreground transition">Serviços</a>
-          <a href="#solucoes" className="hover:text-foreground transition">Soluções</a>
-          <a href="#portfolio" className="hover:text-foreground transition">Portfólio</a>
-          <a href="#faq" className="hover:text-foreground transition">FAQ</a>
-        </nav>
+        <div className="hidden items-center gap-8 text-sm md:flex">
+          <a href="#about" className="hover:text-brown-soft transition">Sobre</a>
+          <a href="#projects" className="hover:text-brown-soft transition">Projetos</a>
+          <a href="#process" className="hover:text-brown-soft transition">Processo</a>
+          <a href="#contact" className="hover:text-brown-soft transition">Contato</a>
+        </div>
         <a
           href={WHATSAPP}
           target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-4 py-2 text-sm font-medium text-white shadow-glow hover:opacity-95 transition"
+          rel="noreferrer"
+          className="group inline-flex items-center gap-2 rounded-full bg-brown-deep px-4 py-2 text-xs font-medium text-[color:var(--off-white)] hover:bg-brown-soft transition-colors"
         >
           Orçamento
-          <ArrowRight className="size-4" />
+          <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </a>
-      </div>
-    </header>
+      </nav>
+    </motion.header>
   );
 }
 
+/* ---------------------------------------------------------------- */
+/* Hero                                                               */
+/* ---------------------------------------------------------------- */
 function Hero() {
-  return (
-    <section id="top" className="relative pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden bg-hero-glow">
-      <div className="absolute inset-0 grid-pattern opacity-40 [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)]" />
-      <div className="relative mx-auto max-w-7xl px-6 grid lg:grid-cols-[1.15fr_1fr] gap-14 items-center">
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs text-muted-foreground">
-            <span className="size-2 rounded-full bg-accent shadow-[0_0_12px] shadow-accent" />
-            Disponível para novos projetos
-          </div>
-          <h1 className="mt-6 font-display font-bold text-4xl md:text-6xl lg:text-7xl leading-[1.02] tracking-tight">
-            Sites e automações que{" "}
-            <span className="text-gradient">transformam visitantes em clientes.</span>
-          </h1>
-          <p className="mt-6 text-lg text-muted-foreground max-w-xl">
-            Desenvolvo sites profissionais, landing pages de alta conversão e
-            automações sob medida para empresas que querem crescer no digital —
-            com estratégia, não só design bonito.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center gap-4">
-            <a
-              href={WHATSAPP}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-6 py-3.5 font-medium text-white shadow-glow hover:opacity-95 transition"
-            >
-              Solicitar Orçamento
-              <ArrowRight className="size-4" />
-            </a>
-            <a
-              href="#portfolio"
-              className="inline-flex items-center gap-2 rounded-full border border-border surface px-6 py-3.5 font-medium hover:border-accent/60 transition"
-            >
-              Ver Portfólio
-            </a>
-          </div>
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const photoY = useTransform(scrollYProgress, [0, 1], [0, 180]);
+  const photoScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+  const titleY = useTransform(scrollYProgress, [0, 1], [0, -80]);
 
-          <dl className="mt-14 grid grid-cols-3 gap-6 max-w-xl">
-            {[
-              { k: "+7 anos", v: "de experiência" },
-              { k: "2018", v: "desenvolvendo software" },
-              { k: "100%", v: "sob medida" },
-            ].map((s) => (
-              <div key={s.k}>
-                <dt className="font-display text-2xl md:text-3xl font-bold">{s.k}</dt>
-                <dd className="text-xs md:text-sm text-muted-foreground mt-1">{s.v}</dd>
+  const title = "Design que respira.";
+  const words = title.split(" ");
+
+  return (
+    <section
+      id="top"
+      ref={ref}
+      className="relative min-h-[100svh] px-6 pt-32 pb-16 md:px-10"
+    >
+      <div className="mx-auto grid max-w-7xl grid-cols-12 gap-6">
+        {/* Photo */}
+        <div className="relative col-span-12 order-2 md:col-span-5 md:order-1 md:col-start-1">
+          <motion.div
+            style={{ y: photoY, scale: photoScale }}
+            className="relative"
+          >
+            <motion.div
+              animate={{ y: [0, -14, 0] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              className="relative mx-auto aspect-[4/5] w-full max-w-md"
+            >
+              <div className="absolute -inset-6 rounded-[42px] bg-[radial-gradient(circle_at_30%_30%,#F4EFE8,transparent_70%)] blur-2xl" />
+              <div className="relative h-full w-full overflow-hidden rounded-[36px] shadow-soft ring-1 ring-black/5">
+                <motion.img
+                  src={PHOTO}
+                  alt="Phlavio Allves"
+                  className="mask-organic h-full w-full object-cover"
+                  initial={{ scale: 1.15, filter: "blur(20px)" }}
+                  animate={{ scale: 1, filter: "blur(0px)" }}
+                  transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+                />
               </div>
+              {/* Floating chips */}
+              <FloatingChip delay={0.9} className="-left-6 top-8" icon={<Sparkles className="h-3.5 w-3.5" />}>
+                Available for hire
+              </FloatingChip>
+              <FloatingChip delay={1.1} className="-right-4 bottom-14" icon={<Figma className="h-3.5 w-3.5" />}>
+                Figma · React
+              </FloatingChip>
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Text */}
+        <motion.div
+          style={{ y: titleY }}
+          className="col-span-12 order-1 flex flex-col justify-center md:col-span-7 md:order-2 md:pl-8"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mb-6 inline-flex w-fit items-center gap-2 rounded-full glass px-3 py-1 text-xs text-brown-soft"
+          >
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brown-soft opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brown-soft" />
+            </span>
+            Portfólio · 2026
+          </motion.div>
+
+          <h1 className="font-display text-[clamp(3rem,9vw,8rem)] leading-[0.95] text-brown-deep">
+            {words.map((w, wi) => (
+              <span key={wi} className="mr-4 inline-block">
+                {w.split("").map((ch, ci) => (
+                  <motion.span
+                    key={ci}
+                    initial={{ y: "110%", opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{
+                      duration: 0.9,
+                      delay: 0.3 + (wi * 4 + ci) * 0.04,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="inline-block"
+                    style={{ willChange: "transform" }}
+                  >
+                    {ch}
+                  </motion.span>
+                ))}
+              </span>
             ))}
-          </dl>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.4, duration: 0.8 }}
+              className="italic text-brown-soft"
+            >
+              Código que converte.
+            </motion.span>
+          </h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.6, duration: 0.8 }}
+            className="mt-6 max-w-lg text-base text-brown-deep/70 md:text-lg"
+          >
+            Sou <b>Phlavio Allves</b>, designer e desenvolvedor. Crio sites autorais,
+            landing pages de alta conversão e experiências digitais que fazem
+            marcas parecerem grandes — desde o primeiro pixel.
+          </motion.p>
+
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <MagneticButton href="#projects" primary>
+              Ver projetos
+            </MagneticButton>
+            <MagneticButton href={WHATSAPP} external>
+              Solicitar orçamento
+            </MagneticButton>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function FloatingChip({
+  children,
+  className = "",
+  delay = 0,
+  icon,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  icon?: ReactNode;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className={`absolute z-10 ${className}`}
+    >
+      <motion.div
+        animate={{ y: [0, -6, 0] }}
+        transition={{ duration: 4 + delay, repeat: Infinity, ease: "easeInOut" }}
+        className="glass shadow-soft flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium text-brown-deep"
+      >
+        {icon}
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function MagneticButton({
+  children,
+  href,
+  primary = false,
+  external = false,
+}: {
+  children: ReactNode;
+  href: string;
+  primary?: boolean;
+  external?: boolean;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 300, damping: 20 });
+  const sy = useSpring(y, { stiffness: 300, damping: 20 });
+
+  const handleMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    x.set((e.clientX - (rect.left + rect.width / 2)) * 0.25);
+    y.set((e.clientY - (rect.top + rect.height / 2)) * 0.25);
+  };
+  const handleLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.a
+      ref={ref}
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noreferrer" : undefined}
+      style={{ x: sx, y: sy }}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      className={`group relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium overflow-hidden ${
+        primary
+          ? "bg-brown-deep text-[color:var(--off-white)]"
+          : "border border-brown/40 text-brown-deep hover:bg-brown-deep hover:text-[color:var(--off-white)] transition-colors"
+      }`}
+    >
+      <span className="relative z-10">{children}</span>
+      <ArrowUpRight className="relative z-10 h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      {primary && (
+        <span className="absolute inset-0 -z-0 bg-brown-soft opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      )}
+    </motion.a>
+  );
+}
+
+/* ---------------------------------------------------------------- */
+/* Marquee — technologies                                             */
+/* ---------------------------------------------------------------- */
+function Marquee() {
+  const items = [
+    "React", "Next.js", "TypeScript", "Tailwind", "Figma", "Framer",
+    "GSAP", "WordPress", "Shopify", "Node.js", "Supabase", "Motion",
+  ];
+  const [paused, setPaused] = useState(false);
+  return (
+    <section
+      className="relative py-14 marquee-mask"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="flex overflow-hidden">
+        <motion.div
+          animate={{ x: paused ? undefined : ["0%", "-50%"] }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          className="flex shrink-0 gap-14 pr-14"
+        >
+          {[...items, ...items].map((t, i) => (
+            <span
+              key={i}
+              className="whitespace-nowrap font-display text-4xl md:text-6xl text-brown-deep/85"
+            >
+              {t} <span className="text-brown-soft">✦</span>
+            </span>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- */
+/* About — floating specialties                                       */
+/* ---------------------------------------------------------------- */
+function About() {
+  const specialties = [
+    { icon: <Palette className="h-4 w-4" />, label: "UI Design" },
+    { icon: <MousePointer2 className="h-4 w-4" />, label: "UX Design" },
+    { icon: <Sparkles className="h-4 w-4" />, label: "Landing Pages" },
+    { icon: <Globe className="h-4 w-4" />, label: "Sites Institucionais" },
+    { icon: <ShoppingBag className="h-4 w-4" />, label: "E-commerce" },
+    { icon: <Layers className="h-4 w-4" />, label: "WordPress" },
+    { icon: <Code2 className="h-4 w-4" />, label: "React" },
+    { icon: <Figma className="h-4 w-4" />, label: "Desenvolvimento Web" },
+  ];
+
+  return (
+    <section id="about" className="relative px-6 py-32 md:px-10">
+      <div className="mx-auto grid max-w-7xl grid-cols-12 gap-6">
+        <div className="col-span-12 md:col-span-5 md:col-start-2">
+          <Reveal>
+            <span className="text-xs uppercase tracking-[0.3em] text-brown-soft">
+              — Sobre
+            </span>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h2 className="mt-4 font-display text-5xl md:text-6xl leading-[1] text-brown-deep">
+              Um estúdio de <br />
+              <span className="italic text-brown-soft">um só</span> ⁠—⁠ obsessivo
+              com detalhes.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p className="mt-6 text-brown-deep/70">
+              Trabalho com marcas que se recusam a parecer com todo mundo.
+              Combino direção de arte, UI moderna e código performático para
+              entregar sites que geram credibilidade — e clientes.
+            </p>
+          </Reveal>
+
+          <div className="mt-8 flex flex-wrap gap-2">
+            {specialties.map((s, i) => (
+              <motion.span
+                key={s.label}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ delay: i * 0.05, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -3 }}
+                className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs text-brown-deep shadow-soft"
+              >
+                {s.icon} {s.label}
+              </motion.span>
+            ))}
+          </div>
         </div>
 
-        <div className="relative">
-          <div className="absolute -inset-6 bg-gradient-primary blur-3xl opacity-30 rounded-full" />
-          <div className="relative rounded-3xl overflow-hidden border border-border shadow-glow">
-            <img
-              src={heroPortrait}
-              alt="Phlavio Allves — desenvolvedor de sites e automações"
-              width={1024}
-              height={1280}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute bottom-4 left-4 right-4 rounded-2xl surface/80 backdrop-blur-md border border-border p-4 flex items-center gap-3">
-              <div className="size-10 rounded-full bg-gradient-primary grid place-items-center text-white font-display font-bold">
-                P
-              </div>
-              <div className="text-sm">
-                <p className="font-display font-semibold">Phlavio Allves</p>
-                <p className="text-muted-foreground text-xs">Desenvolvedor Full-Stack · desde 2018</p>
+        <div className="col-span-12 md:col-span-4 md:col-start-8">
+          <motion.div
+            initial={{ opacity: 0, y: 40, scale: 0.95, filter: "blur(12px)" }}
+            whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-soft"
+          >
+            <img src={PHOTO} alt="Phlavio Allves retrato" className="h-full w-full object-cover" />
+            <div className="absolute inset-x-0 bottom-0 p-5">
+              <div className="glass rounded-2xl p-4">
+                <div className="text-[10px] uppercase tracking-[0.3em] text-brown-soft">Founder</div>
+                <div className="mt-1 font-display text-2xl text-brown-deep">
+                  Phlavio Allves da Silva Jr.
+                </div>
               </div>
             </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------- */
+/* Projects — video cards, tilt, modal                                */
+/* ---------------------------------------------------------------- */
+type Project = {
+  id: string;
+  video: string;
+  title: string;
+  category: string;
+  description: string;
+  stack: string[];
+  year: string;
+};
+
+const PROJECTS: Project[] = [
+  {
+    id: "p1",
+    video: VIDEO_A,
+    title: "Nova Studio — Landing Page",
+    category: "Landing Page",
+    description:
+      "Landing page premium para estúdio de branding, focada em conversão. Copy afiada, animações sob medida e integração com CRM.",
+    stack: ["React", "Framer Motion", "Tailwind", "Vercel"],
+    year: "2026",
+  },
+  {
+    id: "p2",
+    video: VIDEO_B,
+    title: "Ateliê Ícaro — Site Institucional",
+    category: "Institucional",
+    description:
+      "Site autoral para atelier de arquitetura. Direção de arte editorial, tipografia expressiva e navegação cinematográfica.",
+    stack: ["Next.js", "GSAP", "Sanity", "TypeScript"],
+    year: "2026",
+  },
+  {
+    id: "p3",
+    video: VIDEO_A,
+    title: "Casa Praiã — E-commerce",
+    category: "E-commerce",
+    description:
+      "Loja online com identidade sofisticada e checkout otimizado. Aumento de 42% na taxa de conversão nos primeiros 60 dias.",
+    stack: ["Shopify", "Liquid", "React", "Klaviyo"],
+    year: "2025",
+  },
+  {
+    id: "p4",
+    video: VIDEO_B,
+    title: "Dr. Vale — Clínica",
+    category: "Site Institucional",
+    description:
+      "Presença digital para clínica premium. Sistema de agendamento, integração com WhatsApp e SEO técnico completo.",
+    stack: ["WordPress", "Elementor", "PHP", "SEO"],
+    year: "2025",
+  },
+];
+
+function Projects() {
+  const [open, setOpen] = useState<Project | null>(null);
+
+  return (
+    <section id="projects" className="relative px-6 py-32 md:px-10">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-16 grid grid-cols-12 items-end gap-6">
+          <div className="col-span-12 md:col-span-6">
+            <Reveal>
+              <span className="text-xs uppercase tracking-[0.3em] text-brown-soft">— Trabalhos selecionados</span>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="mt-3 font-display text-5xl md:text-7xl leading-[0.95] text-brown-deep">
+                Projetos <span className="italic text-brown-soft">recentes.</span>
+              </h2>
+            </Reveal>
+          </div>
+          <Reveal delay={0.2}>
+            <p className="col-span-12 md:col-span-5 md:col-start-8 text-brown-deep/70">
+              Cada projeto começa com um objetivo claro: transformar visitantes em clientes.
+              Passe o mouse para pré-visualizar, clique para o case completo.
+            </p>
+          </Reveal>
+        </div>
+
+        <div className="grid grid-cols-12 gap-6">
+          {PROJECTS.map((p, i) => (
+            <ProjectCard key={p.id} project={p} index={i} onOpen={() => setOpen(p)} />
+          ))}
+        </div>
+      </div>
+
+      <AnimatePresence>{open && <ProjectModal project={open} onClose={() => setOpen(null)} />}</AnimatePresence>
+    </section>
+  );
+}
+
+function ProjectCard({
+  project,
+  index,
+  onOpen,
+}: {
+  project: Project;
+  index: number;
+  onOpen: () => void;
+}) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const rx = useMotionValue(0);
+  const ry = useMotionValue(0);
+  const srx = useSpring(rx, { stiffness: 200, damping: 20 });
+  const sry = useSpring(ry, { stiffness: 200, damping: 20 });
+
+  const handleMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    const cx = e.clientX - rect.left;
+    const cy = e.clientY - rect.top;
+    ry.set(((cx / rect.width) - 0.5) * 10);
+    rx.set(-((cy / rect.height) - 0.5) * 10);
+  };
+
+  // Asymmetric editorial layout
+  const layouts = [
+    "col-span-12 md:col-span-7 md:col-start-1",
+    "col-span-12 md:col-span-4 md:col-start-9 md:mt-24",
+    "col-span-12 md:col-span-5 md:col-start-2",
+    "col-span-12 md:col-span-6 md:col-start-7 md:-mt-16",
+  ];
+  const aspects = ["aspect-[16/10]", "aspect-[3/4]", "aspect-[4/5]", "aspect-[16/10]"];
+
+  return (
+    <motion.button
+      ref={ref}
+      data-cursor="media"
+      onClick={onOpen}
+      onMouseMove={handleMove}
+      onMouseLeave={() => { rx.set(0); ry.set(0); }}
+      onMouseEnter={() => videoRef.current?.play().catch(() => {})}
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.9, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+      style={{ rotateX: srx, rotateY: sry, transformPerspective: 1000 }}
+      className={`group relative block text-left ${layouts[index % layouts.length]}`}
+    >
+      <div className={`relative w-full overflow-hidden rounded-[28px] shadow-soft ring-1 ring-black/5 ${aspects[index % aspects.length]}`}>
+        <video
+          ref={videoRef}
+          src={project.video}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-brown-deep/40 via-transparent to-transparent opacity-70" />
+        <div className="absolute left-5 top-5 flex items-center gap-2">
+          <span className="glass rounded-full px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-brown-deep">
+            {project.category}
+          </span>
+        </div>
+        <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-4">
+          <div>
+            <div className="font-display text-2xl text-[color:var(--off-white)] md:text-3xl">
+              {project.title}
+            </div>
+            <div className="mt-1 text-xs text-[color:var(--off-white)]/70">
+              {project.year}
+            </div>
+          </div>
+          <motion.div
+            className="glass grid h-11 w-11 place-items-center rounded-full text-brown-deep"
+            whileHover={{ scale: 1.1, rotate: 45 }}
+          >
+            <ArrowUpRight className="h-5 w-5" />
+          </motion.div>
+        </div>
+      </div>
+    </motion.button>
+  );
+}
+
+function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[90] flex items-center justify-center p-4 md:p-10"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-brown-deep/40 backdrop-blur-md" />
+      <motion.div
+        initial={{ opacity: 0, y: 40, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 40, scale: 0.96 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative z-10 grid w-full max-w-6xl grid-cols-1 gap-6 overflow-hidden rounded-[32px] surface-off p-4 shadow-soft md:grid-cols-5 md:p-6"
+      >
+        <div className="md:col-span-3">
+          <div className="relative aspect-video overflow-hidden rounded-[24px] ring-1 ring-black/5">
+            <video
+              src={project.video}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="h-full w-full object-cover"
+            />
+          </div>
+        </div>
+        <div className="md:col-span-2 flex flex-col p-2 md:p-4">
+          <span className="text-xs uppercase tracking-[0.3em] text-brown-soft">{project.category} · {project.year}</span>
+          <h3 className="mt-3 font-display text-4xl leading-[1] text-brown-deep">{project.title}</h3>
+          <p className="mt-4 text-sm text-brown-deep/70">{project.description}</p>
+
+          <div className="mt-6">
+            <div className="text-[10px] uppercase tracking-[0.3em] text-brown-soft">Stack</div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {project.stack.map((s) => (
+                <span key={s} className="rounded-full surface-beige px-3 py-1 text-xs text-brown-deep">{s}</span>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-auto flex flex-wrap gap-3 pt-8">
+            <a href="#projects" className="inline-flex items-center gap-2 rounded-full bg-brown-deep px-5 py-2.5 text-xs font-medium text-[color:var(--off-white)]">
+              <Play className="h-3.5 w-3.5" /> Ver projeto
+            </a>
+            <a href={WHATSAPP} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-brown/30 px-5 py-2.5 text-xs font-medium text-brown-deep hover:bg-brown-deep hover:text-[color:var(--off-white)] transition-colors">
+              Solicitar orçamento <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
+          </div>
+        </div>
+        <button
+          aria-label="Fechar"
+          onClick={onClose}
+          className="absolute right-5 top-5 grid h-10 w-10 place-items-center rounded-full bg-brown-deep text-[color:var(--off-white)] hover:bg-brown-soft transition-colors"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ---------------------------------------------------------------- */
+/* Stats — animated counters                                          */
+/* ---------------------------------------------------------------- */
+function Stats() {
+  const stats = [
+    { value: 84, suffix: "+", label: "Projetos entregues" },
+    { value: 42, suffix: "%", label: "Aumento médio em conversão" },
+    { value: 7, suffix: " anos", label: "De experiência" },
+    { value: 100, suffix: "%", label: "Clientes recomendam" },
+  ];
+  return (
+    <section className="relative px-6 py-24 md:px-10">
+      <div className="mx-auto max-w-7xl rounded-[32px] surface-beige p-10 md:p-16">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+          {stats.map((s, i) => (
+            <Counter key={i} to={s.value} suffix={s.suffix} label={s.label} delay={i * 0.1} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Counter({
+  to,
+  suffix,
+  label,
+  delay,
+}: { to: number; suffix: string; label: string; delay: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    let raf = 0;
+    const duration = 1800;
+    const start = performance.now() + delay * 1000;
+    const tick = (t: number) => {
+      const elapsed = Math.max(0, t - start);
+      const p = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setN(Math.round(eased * to));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, to, delay]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ delay, duration: 0.6 }}
+    >
+      <div className="font-display text-6xl leading-none text-brown-deep md:text-7xl">
+        {n}
+        <span className="text-brown-soft">{suffix}</span>
+      </div>
+      <div className="mt-3 text-sm text-brown-deep/60">{label}</div>
+    </motion.div>
+  );
+}
+
+/* ---------------------------------------------------------------- */
+/* Process — timeline drawn on scroll                                 */
+/* ---------------------------------------------------------------- */
+function Process() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "end 0.2"] });
+  const height = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  const steps = [
+    { n: "01", title: "Descoberta", body: "Entendo seu negócio, público e objetivos. Alinhamos escopo e metas mensuráveis." },
+    { n: "02", title: "Estratégia & UX", body: "Arquitetura de informação, fluxos e wireframes focados em conversão." },
+    { n: "03", title: "Design de Interface", body: "Identidade visual autoral, tipografia expressiva e sistema de componentes." },
+    { n: "04", title: "Desenvolvimento", body: "Código limpo, performance 90+ no Lighthouse e integrações que funcionam." },
+    { n: "05", title: "Entrega & Evolução", body: "Publicação, treinamento e ciclo contínuo de otimização baseado em dados." },
+  ];
+
+  return (
+    <section id="process" ref={ref} className="relative px-6 py-32 md:px-10">
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-16 text-center">
+          <Reveal>
+            <span className="text-xs uppercase tracking-[0.3em] text-brown-soft">— Como trabalho</span>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h2 className="mt-3 font-display text-5xl md:text-7xl text-brown-deep">
+              O <span className="italic text-brown-soft">processo.</span>
+            </h2>
+          </Reveal>
+        </div>
+
+        <div className="relative pl-8 md:pl-0">
+          {/* Center line */}
+          <div className="absolute left-3 top-0 h-full w-px bg-brown/20 md:left-1/2 md:-translate-x-1/2" />
+          <motion.div
+            style={{ height }}
+            className="absolute left-3 top-0 w-px bg-brown-deep md:left-1/2 md:-translate-x-1/2"
+          />
+
+          <div className="space-y-16 md:space-y-24">
+            {steps.map((s, i) => (
+              <ProcessStep key={s.n} step={s} index={i} />
+            ))}
           </div>
         </div>
       </div>
@@ -158,420 +891,228 @@ function Hero() {
   );
 }
 
-const services = [
-  {
-    icon: Layers,
-    title: "Sites Institucionais",
-    desc: "Presença digital sólida, rápida e responsiva para fortalecer sua marca e transmitir credibilidade.",
-  },
-  {
-    icon: Rocket,
-    title: "Landing Pages",
-    desc: "Páginas de alta conversão pensadas para transformar tráfego em clientes qualificados.",
-  },
-  {
-    icon: Workflow,
-    title: "Automações",
-    desc: "Integrações e fluxos que eliminam trabalho manual e liberam tempo do seu time.",
-  },
-  {
-    icon: Code2,
-    title: "Sistemas Personalizados",
-    desc: "Softwares sob medida para automatizar processos únicos do seu negócio.",
-  },
-];
-
-function Services() {
+function ProcessStep({ step, index }: { step: { n: string; title: string; body: string }; index: number }) {
+  const isRight = index % 2 === 1;
   return (
-    <section id="servicos" className="relative py-24 md:py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <SectionHeading
-          eyebrow="Serviços"
-          title="Soluções digitais completas"
-          subtitle="Do design ao deploy — construídas para gerar resultados mensuráveis."
-        />
-        <div className="mt-14 grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {services.map((s) => (
-            <div
-              key={s.title}
-              className="group relative rounded-2xl border border-border surface p-6 hover:border-accent/60 transition"
-            >
-              <div className="size-11 rounded-xl bg-gradient-primary grid place-items-center text-white shadow-glow">
-                <s.icon className="size-5" />
-              </div>
-              <h3 className="mt-5 font-display text-lg font-semibold">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-            </div>
-          ))}
-        </div>
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className={`relative grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-16 ${isRight ? "md:[&>*:first-child]:col-start-2" : ""}`}
+    >
+      {/* Dot */}
+      <div className="absolute left-3 top-2 z-10 h-3 w-3 -translate-x-1/2 rounded-full bg-brown-deep ring-4 ring-[color:var(--off-white)] md:left-1/2" />
+      <div className={`${isRight ? "md:text-left md:pl-16" : "md:text-right md:pr-16"} pl-8 md:pl-0`}>
+        <div className="text-xs uppercase tracking-[0.3em] text-brown-soft">{step.n}</div>
+        <h3 className="mt-2 font-display text-3xl text-brown-deep md:text-4xl">{step.title}</h3>
+        <p className="mt-3 text-sm text-brown-deep/70">{step.body}</p>
       </div>
-    </section>
+    </motion.div>
   );
 }
 
-const stages = [
+/* ---------------------------------------------------------------- */
+/* Testimonials — 3D carousel                                         */
+/* ---------------------------------------------------------------- */
+const TESTIMONIALS = [
   {
-    n: "01",
-    title: "Fortaleça sua marca",
-    desc: "Um site institucional profissional que transmite autoridade desde o primeiro clique.",
+    name: "Marina Costa",
+    role: "Fundadora, Nova Studio",
+    quote: "O Phlavio traduziu a alma da marca em um site que impressiona antes mesmo da primeira palavra ser lida. Dobramos leads em duas semanas.",
   },
   {
-    n: "02",
-    title: "Capte mais clientes",
-    desc: "Landing pages otimizadas para SEO e conversão em campanhas pagas e orgânicas.",
+    name: "Rafael Ícaro",
+    role: "Arquiteto, Ateliê Ícaro",
+    quote: "Direção de arte impecável e execução técnica que raramente se vê no mesmo profissional. Um verdadeiro parceiro criativo.",
   },
   {
-    n: "03",
-    title: "Automatize processos",
-    desc: "Fluxos automáticos que reduzem tarefas manuais e escalam seu atendimento.",
+    name: "Dra. Camila Vale",
+    role: "Diretora, Clínica Vale",
+    quote: "Passamos a receber pacientes de outras cidades logo após o lançamento. O site nos posicionou como referência premium na região.",
   },
   {
-    n: "04",
-    title: "Aumente suas conversões",
-    desc: "Testes, análise de dados e iteração contínua para maximizar resultados.",
-  },
-  {
-    n: "05",
-    title: "Expanda no digital",
-    desc: "Integrações com CRM, WhatsApp, pagamentos e todas as ferramentas do seu negócio.",
-  },
-];
-
-function Stages() {
-  return (
-    <section id="solucoes" className="relative py-24 md:py-32 surface/40">
-      <div className="mx-auto max-w-7xl px-6">
-        <SectionHeading
-          eyebrow="Soluções por etapa"
-          title="Um plano para cada momento do seu negócio"
-          subtitle="Onde quer que você esteja, existe uma solução digital certa para o próximo passo."
-        />
-        <div className="mt-14 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {stages.map((s) => (
-            <div
-              key={s.n}
-              className="rounded-2xl border border-border surface p-6 hover:border-accent/60 transition"
-            >
-              <span className="font-display text-4xl font-bold text-gradient">{s.n}</span>
-              <h3 className="mt-4 font-display text-lg font-semibold">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const reasons = [
-  { icon: Sparkles, title: "Desenvolvimento personalizado", desc: "Nada de template pronto. Cada linha de código pensada para o seu objetivo." },
-  { icon: Gauge, title: "Performance obsessiva", desc: "Sites rápidos, otimizados para Core Web Vitals e Google." },
-  { icon: ShieldCheck, title: "Tecnologias modernas", desc: "Stack atual, segura e preparada para escalar com o seu negócio." },
-  { icon: Headphones, title: "Suporte pós-entrega", desc: "Acompanhamento próximo após o lançamento para garantir o sucesso." },
-];
-
-function WhyMe() {
-  return (
-    <section className="relative py-24 md:py-32">
-      <div className="mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-14 items-center">
-        <div>
-          <p className="text-sm font-medium text-accent uppercase tracking-widest">
-            Por que trabalhar comigo
-          </p>
-          <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight">
-            Código que respeita o seu <span className="text-gradient">tempo e o seu negócio.</span>
-          </h2>
-          <p className="mt-5 text-muted-foreground">
-            Desde 2018 desenvolvo soluções digitais focadas no que importa:
-            performance real, experiência do usuário impecável e conversão.
-            Sem promessas vazias — só resultado.
-          </p>
-        </div>
-        <div className="grid sm:grid-cols-2 gap-5">
-          {reasons.map((r) => (
-            <div key={r.title} className="rounded-2xl border border-border surface p-6">
-              <div className="size-11 rounded-xl bg-gradient-primary grid place-items-center text-white shadow-glow">
-                <r.icon className="size-5" />
-              </div>
-              <h3 className="mt-4 font-display font-semibold">{r.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{r.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const testimonials = [
-  {
-    quote:
-      "Entrega técnica impecável e uma visão estratégica rara. O site novo já refletiu em mais orçamentos na primeira semana.",
-    name: "Cliente institucional",
-    role: "Escritório de advocacia",
-  },
-  {
-    quote:
-      "Automatizou processos que consumiam horas do meu dia. Ganhei tempo e o atendimento ficou muito mais profissional.",
-    name: "Cliente PME",
-    role: "Clínica de estética",
-  },
-  {
-    quote:
-      "Landing page que conversa com o público certo. A taxa de conversão da campanha subiu de forma consistente.",
-    name: "Cliente digital",
-    role: "Prestação de serviços",
+    name: "Bruno Aragão",
+    role: "CEO, Casa Praiã",
+    quote: "Nosso e-commerce ganhou personalidade. A performance e o design elevaram o ticket médio em 27%.",
   },
 ];
 
 function Testimonials() {
+  const [i, setI] = useState(0);
+  const n = TESTIMONIALS.length;
+  const prev = () => setI((v) => (v - 1 + n) % n);
+  const next = () => setI((v) => (v + 1) % n);
+
   return (
-    <section className="relative py-24 md:py-32 surface/40">
-      <div className="mx-auto max-w-7xl px-6">
-        <SectionHeading
-          eyebrow="Depoimentos"
-          title="O que dizem sobre o trabalho"
-          subtitle="Feedback de clientes reais que confiaram no processo."
-        />
-        <div className="mt-14 grid md:grid-cols-3 gap-5">
-          {testimonials.map((t, i) => (
-            <figure
-              key={i}
-              className="rounded-2xl border border-border surface p-7 flex flex-col justify-between"
-            >
-              <Quote className="size-6 text-accent" />
-              <blockquote className="mt-5 text-foreground/90 leading-relaxed">
-                "{t.quote}"
-              </blockquote>
-              <figcaption className="mt-6 pt-5 border-t border-border">
-                <p className="font-display font-semibold">{t.name}</p>
-                <p className="text-xs text-muted-foreground">{t.role}</p>
-              </figcaption>
-            </figure>
-          ))}
+    <section className="relative px-6 py-32 md:px-10">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-14 text-center">
+          <Reveal><span className="text-xs uppercase tracking-[0.3em] text-brown-soft">— Depoimentos</span></Reveal>
+          <Reveal delay={0.1}>
+            <h2 className="mt-3 font-display text-5xl md:text-7xl text-brown-deep">
+              Quem confiou <span className="italic text-brown-soft">recomenda.</span>
+            </h2>
+          </Reveal>
         </div>
-      </div>
-    </section>
-  );
-}
 
-const projects = [
-  {
-    img: project1,
-    tag: "Sistema Web",
-    title: "Painel administrativo sob medida",
-    desc: "Aplicação interna com autenticação, dashboards e gestão de dados em tempo real.",
-  },
-  {
-    img: project2,
-    tag: "Landing Page",
-    title: "Página de conversão para e-commerce",
-    desc: "Layout focado em captura de leads com integração ao WhatsApp e analytics.",
-  },
-  {
-    img: project3,
-    tag: "Automação",
-    title: "Fluxo de automação de atendimento",
-    desc: "Integração entre formulário, CRM e disparos automáticos por e-mail e WhatsApp.",
-  },
-];
-
-function Portfolio() {
-  return (
-    <section id="portfolio" className="relative py-24 md:py-32">
-      <div className="mx-auto max-w-7xl px-6">
-        <SectionHeading
-          eyebrow="Portfólio"
-          title="Projetos entregues"
-          subtitle="Uma amostra da qualidade técnica e visual dos trabalhos desenvolvidos."
-        />
-        <div className="mt-14 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {projects.map((p) => (
-            <article
-              key={p.title}
-              className="group rounded-2xl overflow-hidden border border-border surface hover:border-accent/60 transition"
-            >
-              <div className="aspect-[4/3] overflow-hidden bg-background">
-                <img
-                  src={p.img}
-                  alt={p.title}
-                  width={1200}
-                  height={800}
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-6">
-                <span className="text-xs font-medium text-accent uppercase tracking-widest">
-                  {p.tag}
-                </span>
-                <h3 className="mt-2 font-display text-lg font-semibold">{p.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const faqs = [
-  {
-    q: "Como sei que o site realmente vai atender às necessidades da minha empresa?",
-    a: "Cada projeto é desenvolvido de forma personalizada, com base nos objetivos do seu negócio. Antes do desenvolvimento, alinhamos todas as funcionalidades, design e expectativas para entregar uma solução adequada às suas necessidades.",
-  },
-  {
-    q: "Qual é o prazo médio de entrega?",
-    a: "O prazo varia conforme o escopo. Landing pages costumam ficar prontas em poucos dias; sites institucionais e sistemas mais robustos são combinados no orçamento inicial com cronograma claro.",
-  },
-  {
-    q: "Como funciona o pagamento?",
-    a: "Trabalho com entrada + parcelas por etapas ou pagamento único conforme o projeto. Tudo é combinado por escrito antes do início.",
-  },
-  {
-    q: "Vocês oferecem suporte após a entrega?",
-    a: "Sim. Todo projeto inclui acompanhamento pós-entrega para ajustes e correções, e ofereço planos de manutenção contínua sob demanda.",
-  },
-  {
-    q: "Posso pedir alterações durante o desenvolvimento?",
-    a: "Sim. O processo prevê revisões em pontos específicos. Alterações significativas fora do escopo original são conversadas de forma transparente.",
-  },
-];
-
-function FAQ() {
-  const [open, setOpen] = useState<number | null>(0);
-  return (
-    <section id="faq" className="relative py-24 md:py-32 surface/40">
-      <div className="mx-auto max-w-4xl px-6">
-        <SectionHeading
-          eyebrow="Perguntas frequentes"
-          title="Dúvidas comuns"
-          subtitle="As respostas rápidas para começar seu projeto com tranquilidade."
-        />
-        <div className="mt-12 divide-y divide-border rounded-2xl border border-border surface">
-          {faqs.map((f, i) => {
-            const isOpen = open === i;
-            return (
-              <div key={i}>
-                <button
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:text-accent transition"
-                >
-                  <span className="font-display font-medium">{f.q}</span>
-                  {isOpen ? (
-                    <Minus className="size-5 text-accent shrink-0" />
-                  ) : (
-                    <Plus className="size-5 text-muted-foreground shrink-0" />
-                  )}
-                </button>
-                {isOpen && (
-                  <div className="px-6 pb-6 text-sm text-muted-foreground leading-relaxed">
-                    {f.a}
-                  </div>
-                )}
-              </div>
-            );
+        <div className="relative flex items-center justify-center h-[380px]">
+          {TESTIMONIALS.map((t, idx) => {
+            const offset = idx - i;
+            const rel = ((offset + n + Math.floor(n / 2)) % n) - Math.floor(n / 2);
+            return <TCard key={idx} t={t} rel={rel} />;
           })}
         </div>
+
+        <div className="mt-8 flex items-center justify-center gap-4">
+          <button onClick={prev} className="grid h-11 w-11 place-items-center rounded-full border border-brown/30 text-brown-deep hover:bg-brown-deep hover:text-[color:var(--off-white)] transition-colors">
+            <ArrowUpRight className="h-4 w-4 -rotate-[135deg]" />
+          </button>
+          <div className="text-xs text-brown-deep/60">
+            {String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
+          </div>
+          <button onClick={next} className="grid h-11 w-11 place-items-center rounded-full border border-brown/30 text-brown-deep hover:bg-brown-deep hover:text-[color:var(--off-white)] transition-colors">
+            <ArrowUpRight className="h-4 w-4 rotate-45" />
+          </button>
+        </div>
       </div>
     </section>
   );
 }
 
+function TCard({ t, rel }: { t: (typeof TESTIMONIALS)[number]; rel: number }) {
+  const abs = Math.abs(rel);
+  const isCenter = rel === 0;
+  return (
+    <motion.div
+      animate={{
+        x: rel * 260,
+        rotate: rel * -6,
+        scale: isCenter ? 1 : 0.85,
+        opacity: abs > 2 ? 0 : 1,
+        filter: isCenter ? "blur(0px)" : "blur(3px)",
+        zIndex: 10 - abs,
+      }}
+      transition={{ type: "spring", stiffness: 180, damping: 26 }}
+      className="absolute w-[min(90vw,440px)] rounded-[28px] surface-off p-8 shadow-soft ring-1 ring-black/5"
+    >
+      <div className="font-display text-6xl leading-none text-brown-soft">"</div>
+      <p className="mt-2 font-display text-2xl leading-snug text-brown-deep">
+        {t.quote}
+      </p>
+      <div className="mt-6 flex items-center gap-3">
+        <div className="grid h-10 w-10 place-items-center rounded-full surface-beige text-xs font-semibold text-brown-deep">
+          {t.name.split(" ").map((p) => p[0]).slice(0, 2).join("")}
+        </div>
+        <div>
+          <div className="text-sm font-semibold text-brown-deep">{t.name}</div>
+          <div className="text-xs text-brown-deep/60">{t.role}</div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ---------------------------------------------------------------- */
+/* Final CTA                                                          */
+/* ---------------------------------------------------------------- */
 function FinalCTA() {
   return (
-    <section className="relative py-24 md:py-32">
-      <div className="mx-auto max-w-5xl px-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-primary p-10 md:p-16 text-center shadow-glow">
-          <div className="absolute inset-0 grid-pattern opacity-20" />
-          <div className="relative">
-            <h2 className="font-display text-3xl md:text-5xl font-bold tracking-tight text-white">
-              Pronto para o próximo passo do seu negócio?
-            </h2>
-            <p className="mt-4 text-white/80 max-w-2xl mx-auto">
-              Me chame no WhatsApp e conte seu projeto. Respondo pessoalmente e
-              já saímos do zero com um plano claro.
-            </p>
-            <a
-              href={WHATSAPP}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-background px-7 py-4 font-medium text-foreground hover:opacity-95 transition"
-            >
-              <MessageCircle className="size-5 text-accent" />
-              Falar no WhatsApp
-              <ArrowRight className="size-4" />
-            </a>
-          </div>
+    <section id="contact" className="relative px-6 py-32 md:px-10">
+      <div className="mx-auto max-w-6xl overflow-hidden rounded-[36px] bg-brown-deep p-12 md:p-24 text-center relative">
+        <div className="absolute -top-40 left-1/2 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-brown-soft/40 blur-3xl" />
+        <Reveal>
+          <span className="relative text-xs uppercase tracking-[0.3em] text-[color:var(--off-white)]/60">
+            — Vamos criar juntos
+          </span>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <h2 className="relative mt-4 font-display text-5xl md:text-8xl leading-[0.95] text-[color:var(--off-white)]">
+            Seu próximo site <br />
+            <span className="italic text-[color:var(--beige)]">merece existir.</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={0.2}>
+          <p className="relative mx-auto mt-6 max-w-xl text-[color:var(--off-white)]/70">
+            Vagas limitadas por mês. Se você busca um site autoral que gera resultado, converse comigo.
+          </p>
+        </Reveal>
+        <div className="relative mt-10 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href={WHATSAPP}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-[color:var(--off-white)] px-7 py-4 text-sm font-medium text-brown-deep hover:bg-[color:var(--beige)] transition-colors"
+          >
+            <MessageCircle className="h-4 w-4" /> Solicitar orçamento
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
+          <a
+            href="mailto:contato@phlavio.com"
+            className="inline-flex items-center gap-2 rounded-full border border-[color:var(--off-white)]/30 px-7 py-4 text-sm font-medium text-[color:var(--off-white)] hover:bg-[color:var(--off-white)]/10 transition-colors"
+          >
+            contato@phlavio.com
+          </a>
         </div>
       </div>
     </section>
   );
 }
 
+/* ---------------------------------------------------------------- */
+/* Footer                                                             */
+/* ---------------------------------------------------------------- */
 function Footer() {
   return (
-    <footer className="border-t border-border py-12">
-      <div className="mx-auto max-w-7xl px-6 grid md:grid-cols-3 gap-8 items-center">
-        <div className="flex items-center gap-2 font-display font-bold">
-          <span className="size-8 rounded-lg bg-gradient-primary grid place-items-center">
-            <Code2 className="size-4 text-white" />
-          </span>
-          phlavio<span className="text-gradient">.dev</span>
+    <footer className="relative px-6 py-16 md:px-10">
+      <div className="mx-auto grid max-w-7xl grid-cols-12 gap-6 border-t border-brown/10 pt-10">
+        <div className="col-span-12 md:col-span-6">
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-6 w-6 rounded-full bg-brown-deep" />
+            <span className="font-display text-xl text-brown-deep">Phlavio Allves</span>
+          </div>
+          <p className="mt-4 max-w-sm text-sm text-brown-deep/60">
+            Design autoral e código performático para marcas que se recusam a parecer com todo mundo.
+          </p>
         </div>
-        <p className="text-sm text-muted-foreground text-center">
-          © {new Date().getFullYear()} Phlavio Allves da Silva Junior. Todos os direitos reservados.
-        </p>
-        <div className="flex items-center justify-center md:justify-end gap-3">
-          {[
-            { icon: Instagram, href: "#" },
-            { icon: Linkedin, href: "#" },
-            { icon: Github, href: "#" },
-          ].map((s, i) => (
-            <a
-              key={i}
-              href={s.href}
-              className="size-10 grid place-items-center rounded-full border border-border surface hover:border-accent/60 hover:text-accent transition"
-              aria-label="social"
-            >
-              <s.icon className="size-4" />
-            </a>
-          ))}
+        <div className="col-span-6 md:col-span-3">
+          <div className="text-[10px] uppercase tracking-[0.3em] text-brown-soft">Navegue</div>
+          <ul className="mt-3 space-y-2 text-sm text-brown-deep/80">
+            <li><a href="#about" className="hover:text-brown-soft">Sobre</a></li>
+            <li><a href="#projects" className="hover:text-brown-soft">Projetos</a></li>
+            <li><a href="#process" className="hover:text-brown-soft">Processo</a></li>
+            <li><a href="#contact" className="hover:text-brown-soft">Contato</a></li>
+          </ul>
+        </div>
+        <div className="col-span-6 md:col-span-3">
+          <div className="text-[10px] uppercase tracking-[0.3em] text-brown-soft">Social</div>
+          <ul className="mt-3 space-y-2 text-sm text-brown-deep/80">
+            <li><a href="#" className="inline-flex items-center gap-2 hover:text-brown-soft"><Instagram className="h-3.5 w-3.5" /> Instagram</a></li>
+            <li><a href="#" className="inline-flex items-center gap-2 hover:text-brown-soft"><Linkedin className="h-3.5 w-3.5" /> LinkedIn</a></li>
+            <li><a href="#" className="inline-flex items-center gap-2 hover:text-brown-soft"><Github className="h-3.5 w-3.5" /> GitHub</a></li>
+          </ul>
+        </div>
+        <div className="col-span-12 mt-8 flex flex-col items-start justify-between gap-3 border-t border-brown/10 pt-6 text-xs text-brown-deep/50 md:flex-row md:items-center">
+          <div>© 2026 Phlavio Allves da Silva Junior — Todos os direitos reservados.</div>
+          <div>Feito com café ☕ em algum lugar do Brasil.</div>
         </div>
       </div>
     </footer>
   );
 }
 
-function WhatsAppFAB() {
+/* ---------------------------------------------------------------- */
+/* Reveal helper                                                      */
+/* ---------------------------------------------------------------- */
+function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   return (
-    <a
-      href={WHATSAPP}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Falar no WhatsApp"
-      className="fixed bottom-6 right-6 z-50 size-14 rounded-full bg-gradient-primary shadow-glow grid place-items-center text-white hover:scale-105 transition"
+    <motion.div
+      initial={{ opacity: 0, y: 28, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
     >
-      <MessageCircle className="size-6" />
-    </a>
-  );
-}
-
-function SectionHeading({
-  eyebrow,
-  title,
-  subtitle,
-}: {
-  eyebrow: string;
-  title: string;
-  subtitle: string;
-}) {
-  return (
-    <div className="max-w-2xl">
-      <p className="text-sm font-medium text-accent uppercase tracking-widest">{eyebrow}</p>
-      <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight">{title}</h2>
-      <p className="mt-4 text-muted-foreground text-lg">{subtitle}</p>
-    </div>
+      {children}
+    </motion.div>
   );
 }
