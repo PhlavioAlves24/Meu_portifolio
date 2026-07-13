@@ -36,13 +36,16 @@ import {
 import phlavioAsset from "@/assets/phlavio.jpg.asset.json";
 import projectAAsset from "@/assets/project-a.mp4.asset.json";
 import projectBAsset from "@/assets/project-b.mp4.asset.json";
+import projectCAsset from "@/assets/project-c.mp4.asset.json";
 
 const PHOTO = phlavioAsset.url;
 const VIDEO_A = projectAAsset.url;
 const VIDEO_B = projectBAsset.url;
+const VIDEO_C = projectCAsset.url;
 
+const EMAIL = "thinkingincode5@gmail.com";
 const WHATSAPP =
-  "https://wa.me/5500000000000?text=" +
+  "https://wa.me/558173146238?text=" +
   encodeURIComponent("Olá Phlavio! Vim pelo seu portfólio e quero um orçamento.");
 
 export const Route = createFileRoute("/")({
@@ -189,9 +192,10 @@ function Nav() {
           href={WHATSAPP}
           target="_blank"
           rel="noreferrer"
-          className="group inline-flex items-center gap-2 rounded-full bg-brown-deep px-4 py-2 text-xs font-medium text-[color:var(--off-white)] hover:bg-brown-soft transition-colors"
+          className="group inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-xs font-medium text-white hover:bg-[#1EBE57] transition-colors"
         >
-          Orçamento
+          <MessageCircle className="h-3.5 w-3.5" />
+          WhatsApp
           <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </a>
       </nav>
@@ -432,7 +436,7 @@ function Marquee() {
           {[...items, ...items].map((t, i) => (
             <span
               key={i}
-              className="whitespace-nowrap font-display text-4xl md:text-6xl text-brown-deep/85"
+              className="whitespace-nowrap font-display text-xl md:text-3xl text-brown-deep/85"
             >
               {t} <span className="text-brown-soft">✦</span>
             </span>
@@ -559,22 +563,12 @@ const PROJECTS: Project[] = [
   },
   {
     id: "p3",
-    video: VIDEO_A,
+    video: VIDEO_C,
     title: "Casa Praiã — E-commerce",
     category: "E-commerce",
     description:
       "Loja online com identidade sofisticada e checkout otimizado. Aumento de 42% na taxa de conversão nos primeiros 60 dias.",
     stack: ["Shopify", "Liquid", "React", "Klaviyo"],
-    year: "2025",
-  },
-  {
-    id: "p4",
-    video: VIDEO_B,
-    title: "Dr. Vale — Clínica",
-    category: "Site Institucional",
-    description:
-      "Presença digital para clínica premium. Sistema de agendamento, integração com WhatsApp e SEO técnico completo.",
-    stack: ["WordPress", "Elementor", "PHP", "SEO"],
     year: "2025",
   },
 ];
@@ -645,10 +639,9 @@ function ProjectCard({
   const layouts = [
     "col-span-12 md:col-span-7 md:col-start-1",
     "col-span-12 md:col-span-4 md:col-start-9 md:mt-24",
-    "col-span-12 md:col-span-5 md:col-start-2",
-    "col-span-12 md:col-span-6 md:col-start-7 md:-mt-16",
+    "col-span-12 md:col-span-6 md:col-start-4",
   ];
-  const aspects = ["aspect-[16/10]", "aspect-[3/4]", "aspect-[4/5]", "aspect-[16/10]"];
+  const aspects = ["aspect-[16/10]", "aspect-[3/4]", "aspect-[16/10]"];
 
   return (
     <motion.button
@@ -847,7 +840,7 @@ function Counter({
 /* ---------------------------------------------------------------- */
 function Process() {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "end 0.2"] });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.85", "end 0.5"] });
   const height = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   const steps = [
@@ -1042,16 +1035,16 @@ function FinalCTA() {
             href={WHATSAPP}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-[color:var(--off-white)] px-7 py-4 text-sm font-medium text-brown-deep hover:bg-[color:var(--beige)] transition-colors"
+            className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-7 py-4 text-sm font-medium text-white hover:bg-[#1EBE57] transition-colors"
           >
-            <MessageCircle className="h-4 w-4" /> Solicitar orçamento
+            <MessageCircle className="h-4 w-4" /> WhatsApp
             <ArrowUpRight className="h-4 w-4" />
           </a>
           <a
-            href="mailto:contato@phlavio.com"
+            href={`mailto:${EMAIL}`}
             className="inline-flex items-center gap-2 rounded-full border border-[color:var(--off-white)]/30 px-7 py-4 text-sm font-medium text-[color:var(--off-white)] hover:bg-[color:var(--off-white)]/10 transition-colors"
           >
-            contato@phlavio.com
+            {EMAIL}
           </a>
         </div>
       </div>
