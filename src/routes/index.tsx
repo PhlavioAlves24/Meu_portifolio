@@ -579,7 +579,7 @@ function Projects() {
     <section id="projects" className="relative px-6 py-32 md:px-10">
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 grid grid-cols-12 gap-6">
-          <div className="col-span-12 md:col-span-8">
+          <div className="col-span-12 md:col-span-10 lg:col-span-9">
             <Reveal>
               <span className="text-xs uppercase tracking-[0.3em] text-brown-soft">— Trabalhos selecionados</span>
             </Reveal>
@@ -590,7 +590,7 @@ function Projects() {
             </Reveal>
             <Reveal delay={0.2}>
               <div className="mt-6 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-                <p className="text-base leading-relaxed text-brown-deep/70 md:text-lg">
+                <p className="max-w-3xl text-base leading-relaxed text-brown-deep/70 md:text-lg">
                   Cada projeto nasce de um objetivo claro: transformar cada visita em uma
                   conversa real sobre orçamento. Passe o mouse para ver o site em
                   movimento e clique para abrir o case completo.
