@@ -192,9 +192,10 @@ function Nav() {
           href={WHATSAPP}
           target="_blank"
           rel="noreferrer"
-          className="group inline-flex items-center gap-2 rounded-full bg-brown-deep px-4 py-2 text-xs font-medium text-[color:var(--off-white)] hover:bg-brown-soft transition-colors"
+          className="group inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-xs font-medium text-white hover:bg-[#1EBE57] transition-colors"
         >
-          Orçamento
+          <MessageCircle className="h-3.5 w-3.5" />
+          WhatsApp
           <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </a>
       </nav>
@@ -1034,16 +1035,16 @@ function FinalCTA() {
             href={WHATSAPP}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-[color:var(--off-white)] px-7 py-4 text-sm font-medium text-brown-deep hover:bg-[color:var(--beige)] transition-colors"
+            className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-7 py-4 text-sm font-medium text-white hover:bg-[#1EBE57] transition-colors"
           >
-            <MessageCircle className="h-4 w-4" /> Solicitar orçamento
+            <MessageCircle className="h-4 w-4" /> WhatsApp
             <ArrowUpRight className="h-4 w-4" />
           </a>
           <a
-            href="mailto:contato@phlavio.com"
+            href={`mailto:${EMAIL}`}
             className="inline-flex items-center gap-2 rounded-full border border-[color:var(--off-white)]/30 px-7 py-4 text-sm font-medium text-[color:var(--off-white)] hover:bg-[color:var(--off-white)]/10 transition-colors"
           >
-            contato@phlavio.com
+            {EMAIL}
           </a>
         </div>
       </div>
