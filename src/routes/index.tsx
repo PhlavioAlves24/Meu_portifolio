@@ -192,10 +192,9 @@ function Nav() {
           href={WHATSAPP}
           target="_blank"
           rel="noreferrer"
-          className="group inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-xs font-medium text-white hover:bg-[#1EBE57] transition-colors"
+          className="group inline-flex items-center gap-2 rounded-full bg-brown-deep px-4 py-2 text-xs font-medium text-[color:var(--off-white)] hover:bg-brown-soft transition-colors"
         >
-          <MessageCircle className="h-3.5 w-3.5" />
-          WhatsApp
+          Orçamento
           <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </a>
       </nav>
@@ -591,10 +590,22 @@ function Projects() {
             </Reveal>
           </div>
           <Reveal delay={0.2}>
-            <p className="col-span-12 md:col-span-5 md:col-start-8 text-brown-deep/70">
-              Cada projeto começa com um objetivo claro: transformar visitantes em clientes.
-              Passe o mouse para pré-visualizar, clique para o case completo.
-            </p>
+            <div className="col-span-12 md:col-span-5 md:col-start-8 space-y-5">
+              <p className="text-brown-deep/70">
+                Cada projeto nasce de um objetivo claro: transformar cada visita em uma
+                conversa real sobre orçamento. Passe o mouse para ver o site em
+                movimento e clique para abrir o case completo.
+              </p>
+              <a
+                href={WHATSAPP}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-xs font-medium text-white hover:bg-[#1EBE57] transition-colors"
+              >
+                <MessageCircle className="h-4 w-4" /> Falar sobre o meu projeto
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </a>
+            </div>
           </Reveal>
         </div>
 
