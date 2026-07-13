@@ -578,8 +578,8 @@ function Projects() {
   return (
     <section id="projects" className="relative px-6 py-32 md:px-10">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-16 grid grid-cols-12 items-end gap-6">
-          <div className="col-span-12 md:col-span-6">
+        <div className="mb-16 grid grid-cols-12 gap-6">
+          <div className="col-span-12 md:col-span-8">
             <Reveal>
               <span className="text-xs uppercase tracking-[0.3em] text-brown-soft">— Trabalhos selecionados</span>
             </Reveal>
@@ -588,25 +588,25 @@ function Projects() {
                 Projetos <span className="italic text-brown-soft">recentes.</span>
               </h2>
             </Reveal>
+            <Reveal delay={0.2}>
+              <div className="mt-6 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+                <p className="max-w-xl text-base leading-relaxed text-brown-deep/70">
+                  Cada projeto nasce de um objetivo claro: transformar cada visita em uma
+                  conversa real sobre orçamento. Passe o mouse para ver o site em
+                  movimento e clique para abrir o case completo.
+                </p>
+                <a
+                  href={WHATSAPP}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-xs font-medium text-white hover:bg-[#1EBE57] transition-colors"
+                >
+                  <MessageCircle className="h-4 w-4" /> Falar sobre o meu projeto
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </a>
+              </div>
+            </Reveal>
           </div>
-          <Reveal delay={0.2}>
-            <div className="col-span-12 md:col-span-5 md:col-start-8 space-y-5">
-              <p className="text-brown-deep/70">
-                Cada projeto nasce de um objetivo claro: transformar cada visita em uma
-                conversa real sobre orçamento. Passe o mouse para ver o site em
-                movimento e clique para abrir o case completo.
-              </p>
-              <a
-                href={WHATSAPP}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-xs font-medium text-white hover:bg-[#1EBE57] transition-colors"
-              >
-                <MessageCircle className="h-4 w-4" /> Falar sobre o meu projeto
-                <ArrowUpRight className="h-3.5 w-3.5" />
-              </a>
-            </div>
-          </Reveal>
         </div>
 
         <div className="grid grid-cols-12 gap-6">
