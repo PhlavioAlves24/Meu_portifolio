@@ -590,7 +590,7 @@ function Projects() {
             </Reveal>
             <Reveal delay={0.2}>
               <div className="mt-6 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-                <p className="max-w-xl text-base leading-relaxed text-brown-deep/70">
+                <p className="text-base leading-relaxed text-brown-deep/70 md:text-lg">
                   Cada projeto nasce de um objetivo claro: transformar cada visita em uma
                   conversa real sobre orçamento. Passe o mouse para ver o site em
                   movimento e clique para abrir o case completo.
@@ -599,7 +599,7 @@ function Projects() {
                   href={WHATSAPP}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-xs font-medium text-white hover:bg-[#1EBE57] transition-colors"
+                  className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-xs font-medium text-white hover:bg-[#1EBE57] transition-colors"
                 >
                   <MessageCircle className="h-4 w-4" /> Falar sobre o meu projeto
                   <ArrowUpRight className="h-3.5 w-3.5" />
