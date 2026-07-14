@@ -33,15 +33,15 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import phlavioAsset from "@/assets/phlavio.jpg.asset.json";
-import projectAAsset from "@/assets/project-a.mp4.asset.json";
-import projectBAsset from "@/assets/project-b.mp4.asset.json";
-import projectCAsset from "@/assets/project-c.mp4.asset.json";
+import phlavioPhoto from "@/assets/phlavio.jpg?url";
+import projectAVideo from "@/assets/project-a.mp4?url";
+import projectBVideo from "@/assets/project-b.mp4?url";
+import projectCVideo from "@/assets/project-c.mp4?url";
 
-const PHOTO = phlavioAsset.url;
-const VIDEO_A = projectAAsset.url;
-const VIDEO_B = projectBAsset.url;
-const VIDEO_C = projectCAsset.url;
+const PHOTO = phlavioPhoto;
+const VIDEO_A = projectAVideo;
+const VIDEO_B = projectBVideo;
+const VIDEO_C = projectCVideo;
 
 const EMAIL = "thinkingincode5@gmail.com";
 const WHATSAPP =
