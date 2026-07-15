@@ -837,11 +837,11 @@ function Counter({
       viewport={{ once: true, margin: "-80px" }}
       transition={{ delay, duration: 0.6 }}
     >
-      <div className="font-display text-6xl leading-none text-brown-deep md:text-7xl">
+      <div className="font-display text-4xl leading-none text-brown-deep sm:text-5xl md:text-6xl lg:text-7xl">
         {n}
         <span className="text-brown-soft">{suffix}</span>
       </div>
-      <div className="mt-3 text-sm text-brown-deep/60">{label}</div>
+      <div className="mt-2 text-xs text-brown-deep/60 sm:mt-3 sm:text-sm">{label}</div>
     </motion.div>
   );
 }
