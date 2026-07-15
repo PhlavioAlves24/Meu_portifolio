@@ -424,7 +424,7 @@ function Marquee() {
   const [paused, setPaused] = useState(false);
   return (
     <section
-      className="relative py-14 marquee-mask"
+      className="relative py-8 sm:py-12 md:py-14 marquee-mask"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -432,12 +432,12 @@ function Marquee() {
         <motion.div
           animate={{ x: paused ? undefined : ["0%", "-50%"] }}
           transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-          className="flex shrink-0 gap-14 pr-14"
+          className="flex shrink-0 gap-6 pr-6 sm:gap-10 sm:pr-10 md:gap-14 md:pr-14"
         >
           {[...items, ...items].map((t, i) => (
             <span
               key={i}
-              className="whitespace-nowrap font-display text-xl md:text-3xl text-brown-deep/85"
+              className="whitespace-nowrap font-display text-sm sm:text-base md:text-2xl lg:text-3xl text-brown-deep/85"
             >
               {t} <span className="text-brown-soft">✦</span>
             </span>
@@ -1072,7 +1072,7 @@ function Footer() {
       <div className="mx-auto grid max-w-7xl grid-cols-12 gap-6 border-t border-brown/10 pt-10">
         <div className="col-span-12 md:col-span-6">
           <div className="flex items-center gap-2">
-            <span className="inline-block h-6 w-6 rounded-full bg-brown-deep" />
+            <img src={LOGO} alt="Phlavio Allves" className="h-7 w-7 rounded-full object-cover ring-1 ring-black/10" />
             <span className="font-display text-xl text-brown-deep">Phlavio Allves</span>
           </div>
           <p className="mt-4 max-w-sm text-sm text-brown-deep/60">
