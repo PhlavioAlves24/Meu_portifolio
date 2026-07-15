@@ -221,7 +221,7 @@ function Hero() {
     <section
       id="top"
       ref={ref}
-      className="relative min-h-[100svh] px-6 pt-32 pb-16 md:px-10"
+      className="relative min-h-[100svh] px-6 pt-32 pb-24 md:px-10 md:pb-16"
     >
       <div className="mx-auto grid max-w-7xl grid-cols-12 gap-6">
         {/* Photo */}
