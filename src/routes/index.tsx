@@ -792,9 +792,9 @@ function Stats() {
     { value: 100, suffix: "%", label: "Clientes recomendam" },
   ];
   return (
-    <section className="relative px-6 py-24 md:px-10">
-      <div className="mx-auto max-w-7xl rounded-[32px] surface-beige p-10 md:p-16">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+    <section className="relative px-4 py-16 sm:px-6 md:px-10 md:py-24">
+      <div className="mx-auto max-w-7xl rounded-[24px] surface-beige p-6 sm:p-10 md:rounded-[32px] md:p-16">
+        <div className="grid grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4">
           {stats.map((s, i) => (
             <Counter key={i} to={s.value} suffix={s.suffix} label={s.label} delay={i * 0.1} />
           ))}
