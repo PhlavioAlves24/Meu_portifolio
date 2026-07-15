@@ -181,7 +181,7 @@ function Nav() {
         }`}
       >
         <a href="#top" className="flex items-center gap-2 text-brown-deep">
-          <span className="inline-block h-6 w-6 rounded-full bg-brown-deep" />
+          <img src={LOGO} alt="Phlavio Allves" className="h-8 w-8 rounded-full object-cover ring-1 ring-black/10" />
           <span className="text-sm font-semibold tracking-tight">Phlavio Allves</span>
         </a>
         <div className="hidden items-center gap-8 text-sm md:flex">
