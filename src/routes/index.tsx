@@ -424,7 +424,7 @@ function Marquee() {
   const [paused, setPaused] = useState(false);
   return (
     <section
-      className="relative z-20 bg-[var(--off-white)] py-8 sm:py-12 md:py-14 marquee-mask"
+      className="relative z-20 mt-8 bg-[var(--off-white)] py-8 sm:mt-0 sm:py-12 md:py-14 marquee-mask"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
