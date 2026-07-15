@@ -37,11 +37,13 @@ import phlavioPhoto from "@/assets/phlavio.jpg?url";
 import projectAVideo from "@/assets/project-a.mp4?url";
 import projectBVideo from "@/assets/project-b.mp4?url";
 import projectCVideo from "@/assets/project-c.mp4?url";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 const PHOTO = phlavioPhoto;
 const VIDEO_A = projectAVideo;
 const VIDEO_B = projectBVideo;
 const VIDEO_C = projectCVideo;
+const LOGO = logoAsset.url;
 
 const EMAIL = "thinkingincode5@gmail.com";
 const WHATSAPP =
@@ -179,7 +181,7 @@ function Nav() {
         }`}
       >
         <a href="#top" className="flex items-center gap-2 text-brown-deep">
-          <span className="inline-block h-6 w-6 rounded-full bg-brown-deep" />
+          <img src={LOGO} alt="Phlavio Allves" className="h-8 w-8 rounded-full object-cover ring-1 ring-black/10" />
           <span className="text-sm font-semibold tracking-tight">Phlavio Allves</span>
         </a>
         <div className="hidden items-center gap-8 text-sm md:flex">
@@ -790,9 +792,9 @@ function Stats() {
     { value: 100, suffix: "%", label: "Clientes recomendam" },
   ];
   return (
-    <section className="relative px-6 py-24 md:px-10">
-      <div className="mx-auto max-w-7xl rounded-[32px] surface-beige p-10 md:p-16">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+    <section className="relative px-4 py-16 sm:px-6 md:px-10 md:py-24">
+      <div className="mx-auto max-w-7xl rounded-[24px] surface-beige p-6 sm:p-10 md:rounded-[32px] md:p-16">
+        <div className="grid grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4">
           {stats.map((s, i) => (
             <Counter key={i} to={s.value} suffix={s.suffix} label={s.label} delay={i * 0.1} />
           ))}
@@ -835,11 +837,11 @@ function Counter({
       viewport={{ once: true, margin: "-80px" }}
       transition={{ delay, duration: 0.6 }}
     >
-      <div className="font-display text-6xl leading-none text-brown-deep md:text-7xl">
+      <div className="font-display text-4xl leading-none text-brown-deep sm:text-5xl md:text-6xl lg:text-7xl">
         {n}
         <span className="text-brown-soft">{suffix}</span>
       </div>
-      <div className="mt-3 text-sm text-brown-deep/60">{label}</div>
+      <div className="mt-2 text-xs text-brown-deep/60 sm:mt-3 sm:text-sm">{label}</div>
     </motion.div>
   );
 }
