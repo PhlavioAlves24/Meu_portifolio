@@ -37,11 +37,13 @@ import phlavioPhoto from "@/assets/phlavio.jpg?url";
 import projectAVideo from "@/assets/project-a.mp4?url";
 import projectBVideo from "@/assets/project-b.mp4?url";
 import projectCVideo from "@/assets/project-c.mp4?url";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 const PHOTO = phlavioPhoto;
 const VIDEO_A = projectAVideo;
 const VIDEO_B = projectBVideo;
 const VIDEO_C = projectCVideo;
+const LOGO = logoAsset.url;
 
 const EMAIL = "thinkingincode5@gmail.com";
 const WHATSAPP =
