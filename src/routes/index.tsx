@@ -1093,9 +1093,8 @@ function Footer() {
         <div className="col-span-6 md:col-span-3">
           <div className="text-[10px] uppercase tracking-[0.3em] text-brown-soft">Social</div>
           <ul className="mt-3 space-y-2 text-sm text-brown-deep/80">
-            <li><a href="#" className="inline-flex items-center gap-2 hover:text-brown-soft"><Instagram className="h-3.5 w-3.5" /> Instagram</a></li>
-            <li><a href="#" className="inline-flex items-center gap-2 hover:text-brown-soft"><Linkedin className="h-3.5 w-3.5" /> LinkedIn</a></li>
-            <li><a href="#" className="inline-flex items-center gap-2 hover:text-brown-soft"><Github className="h-3.5 w-3.5" /> GitHub</a></li>
+            <li><a href={INSTAGRAM} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-brown-soft"><Instagram className="h-3.5 w-3.5" /> Instagram</a></li>
+            <li><a href={GITHUB} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-brown-soft"><Github className="h-3.5 w-3.5" /> GitHub</a></li>
           </ul>
         </div>
         <div className="col-span-12 mt-8 flex flex-col items-start justify-between gap-3 border-t border-brown/10 pt-6 text-xs text-brown-deep/50 md:flex-row md:items-center">
