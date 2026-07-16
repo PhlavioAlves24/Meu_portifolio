@@ -11,7 +11,6 @@ import {
   Palette,
   MousePointer2,
   Instagram,
-  Linkedin,
   Github,
   MessageCircle,
   Play,
