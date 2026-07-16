@@ -49,6 +49,8 @@ const EMAIL = "thinkingincode5@gmail.com";
 const WHATSAPP =
   "https://wa.me/558173146238?text=" +
   encodeURIComponent("Olá Phlavio! Vim pelo seu portfólio e quero um orçamento.");
+const GITHUB = "https://github.com/PhlavioAlves24";
+const INSTAGRAM = "https://www.instagram.com/thinkingincode.inc/";
 
 export const Route = createFileRoute("/")({
   component: Index,
