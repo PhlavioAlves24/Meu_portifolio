@@ -36,7 +36,7 @@ import phlavioPhoto from "@/assets/phlavio.jpg?url";
 import projectAVideo from "@/assets/project-a.mp4?url";
 import projectBVideo from "@/assets/project-b.mp4?url";
 import projectCVideo from "@/assets/project-c.mp4?url";
-import logoAsset from "@/assets/logo.png.asset.json";
+import logoUrl from "@/assets/logo.png?url";
 
 const PHOTO = phlavioPhoto;
 const VIDEO_A = projectAVideo;
