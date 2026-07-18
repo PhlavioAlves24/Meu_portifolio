@@ -36,13 +36,13 @@ import phlavioPhoto from "@/assets/phlavio.jpg?url";
 import projectAVideo from "@/assets/project-a.mp4?url";
 import projectBVideo from "@/assets/project-b.mp4?url";
 import projectCVideo from "@/assets/project-c.mp4?url";
-import logoAsset from "@/assets/logo.png.asset.json";
+import logoUrl from "@/assets/logo.png?url";
 
 const PHOTO = phlavioPhoto;
 const VIDEO_A = projectAVideo;
 const VIDEO_B = projectBVideo;
 const VIDEO_C = projectCVideo;
-const LOGO = logoAsset.url;
+const LOGO = logoUrl;
 
 const EMAIL = "thinkingincode5@gmail.com";
 const WHATSAPP =
@@ -247,13 +247,6 @@ function Hero() {
                   transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
                 />
               </div>
-              {/* Floating chips */}
-              <FloatingChip delay={0.9} className="-left-6 top-8" icon={<Sparkles className="h-3.5 w-3.5" />}>
-                Available for hire
-              </FloatingChip>
-              <FloatingChip delay={1.1} className="-right-4 bottom-14" icon={<Figma className="h-3.5 w-3.5" />}>
-                Figma · React
-              </FloatingChip>
             </motion.div>
           </motion.div>
         </div>
