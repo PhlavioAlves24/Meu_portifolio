@@ -182,8 +182,8 @@ function Nav() {
         }`}
       >
         <a href="#top" className="flex items-center gap-2 text-brown-deep">
-          <img src={LOGO} alt="Phlavio Allves" className="h-8 w-8 rounded-full object-cover ring-1 ring-black/10" />
-          <span className="text-sm font-semibold tracking-tight">Phlavio Allves</span>
+          <img src={LOGO} alt="Phlavio Alves" className="h-8 w-8 rounded-full object-cover ring-1 ring-black/10" />
+          <span className="text-sm font-semibold tracking-tight">Phlavio Alves</span>
         </a>
         <div className="hidden items-center gap-8 text-sm md:flex">
           <a href="#about" className="hover:text-brown-soft transition">Sobre</a>
@@ -1073,8 +1073,8 @@ function Footer() {
       <div className="mx-auto grid max-w-7xl grid-cols-12 gap-6 border-t border-brown/10 pt-10">
         <div className="col-span-12 md:col-span-6">
           <div className="flex items-center gap-2">
-            <img src={LOGO} alt="Phlavio Allves" className="h-7 w-7 rounded-full object-cover ring-1 ring-black/10" />
-            <span className="font-display text-xl text-brown-deep">Phlavio Allves</span>
+            <img src={LOGO} alt="Phlavio Alves" className="h-7 w-7 rounded-full object-cover ring-1 ring-black/10" />
+            <span className="font-display text-xl text-brown-deep">Phlavio Alves</span>
           </div>
           <p className="mt-4 max-w-sm text-sm text-brown-deep/60">
             Design autoral e código performático para marcas que se recusam a parecer com todo mundo.
