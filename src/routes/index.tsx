@@ -42,7 +42,7 @@ const PHOTO = phlavioPhoto;
 const VIDEO_A = projectAVideo;
 const VIDEO_B = projectBVideo;
 const VIDEO_C = projectCVideo;
-const LOGO = logoAsset.url;
+const LOGO = logoUrl;
 
 const EMAIL = "thinkingincode5@gmail.com";
 const WHATSAPP =
