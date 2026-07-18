@@ -247,13 +247,6 @@ function Hero() {
                   transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
                 />
               </div>
-              {/* Floating chips */}
-              <FloatingChip delay={0.9} className="-left-6 top-8" icon={<Sparkles className="h-3.5 w-3.5" />}>
-                Available for hire
-              </FloatingChip>
-              <FloatingChip delay={1.1} className="-right-4 bottom-14" icon={<Figma className="h-3.5 w-3.5" />}>
-                Figma · React
-              </FloatingChip>
             </motion.div>
           </motion.div>
         </div>
