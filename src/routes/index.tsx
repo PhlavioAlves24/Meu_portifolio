@@ -510,8 +510,8 @@ function About() {
             <div className="absolute inset-x-0 bottom-0 p-5">
               <div className="glass rounded-2xl p-4">
                 <div className="text-[10px] uppercase tracking-[0.3em] text-brown-soft">Founder</div>
-                <div className="mt-1 font-display text-2xl text-brown-deep">
-                  Phlavio Allves da Silva Jr.
+                <div className="mt-1 font-display text-2xl text-brown-deep" translate="no">
+                  Phlavio Alves da Silva Jr.
                 </div>
               </div>
             </div>
