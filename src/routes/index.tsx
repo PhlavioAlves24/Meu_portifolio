@@ -506,7 +506,7 @@ function About() {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-soft"
           >
-            <img src={PHOTO} alt="Phlavio Allves retrato" className="h-full w-full object-cover" />
+            <img src={PHOTO} alt="Phlavio Alves retrato" decoding="async" fetchPriority="high" className="h-full w-full object-cover" />
             <div className="absolute inset-x-0 bottom-0 p-5">
               <div className="glass rounded-2xl p-4">
                 <div className="text-[10px] uppercase tracking-[0.3em] text-brown-soft">Founder</div>
