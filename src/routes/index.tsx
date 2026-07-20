@@ -183,7 +183,7 @@ function Nav() {
       >
         <a href="#top" className="flex items-center gap-2 text-brown-deep">
           <img src={LOGO} alt="Phlavio Alves" className="h-8 w-8 rounded-full object-cover ring-1 ring-black/10" />
-          <span className="text-sm font-semibold tracking-tight">Phlavio Alves</span>
+          <span className="text-sm font-semibold tracking-tight" translate="no">Phlavio Alves</span>
         </a>
         <div className="hidden items-center gap-8 text-sm md:flex">
           <a href="#about" className="hover:text-brown-soft transition">Sobre</a>
