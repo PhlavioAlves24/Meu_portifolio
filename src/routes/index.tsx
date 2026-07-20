@@ -183,7 +183,7 @@ function Nav() {
       >
         <a href="#top" className="flex items-center gap-2 text-brown-deep">
           <img src={LOGO} alt="Phlavio Alves" className="h-8 w-8 rounded-full object-cover ring-1 ring-black/10" />
-          <span className="text-sm font-semibold tracking-tight">Phlavio Alves</span>
+          <span className="text-sm font-semibold tracking-tight" translate="no">Phlavio Alves</span>
         </a>
         <div className="hidden items-center gap-8 text-sm md:flex">
           <a href="#about" className="hover:text-brown-soft transition">Sobre</a>
@@ -240,7 +240,7 @@ function Hero() {
               <div className="relative h-full w-full overflow-hidden rounded-[36px] shadow-soft ring-1 ring-black/5">
                 <motion.img
                   src={PHOTO}
-                  alt="Phlavio Allves"
+                  alt="Phlavio Alves"
                   className="mask-organic h-full w-full object-cover"
                   initial={{ scale: 1.15, filter: "blur(20px)" }}
                   animate={{ scale: 1, filter: "blur(0px)" }}
@@ -306,7 +306,7 @@ function Hero() {
             transition={{ delay: 1.6, duration: 0.8 }}
             className="mt-6 max-w-lg text-base text-brown-deep/70 md:text-lg"
           >
-            Sou <b>Phlavio Allves</b>, designer e desenvolvedor. Crio sites autorais,
+            Sou <b translate="no">Phlavio Alves</b>, designer e desenvolvedor. Crio sites autorais,
             landing pages de alta conversão e experiências digitais que fazem
             marcas parecerem grandes — desde o primeiro pixel.
           </motion.p>
@@ -510,8 +510,8 @@ function About() {
             <div className="absolute inset-x-0 bottom-0 p-5">
               <div className="glass rounded-2xl p-4">
                 <div className="text-[10px] uppercase tracking-[0.3em] text-brown-soft">Founder</div>
-                <div className="mt-1 font-display text-2xl text-brown-deep">
-                  Phlavio Allves da Silva Jr.
+                <div className="mt-1 font-display text-2xl text-brown-deep" translate="no">
+                  Phlavio Alves da Silva Jr.
                 </div>
               </div>
             </div>
@@ -1103,7 +1103,7 @@ function Footer() {
         <div className="col-span-12 md:col-span-6">
           <div className="flex items-center gap-2">
             <img src={LOGO} alt="Phlavio Alves" loading="lazy" decoding="async" className="h-7 w-7 rounded-full object-cover ring-1 ring-black/10" />
-            <span className="font-display text-xl text-brown-deep">Phlavio Alves</span>
+            <span className="font-display text-xl text-brown-deep" translate="no">Phlavio Alves</span>
           </div>
           <p className="mt-4 max-w-sm text-sm text-brown-deep/60">
             Design autoral e código performático para marcas que se recusam a parecer com todo mundo.
@@ -1126,7 +1126,7 @@ function Footer() {
           </ul>
         </div>
         <div className="col-span-12 mt-8 flex flex-col items-start justify-between gap-3 border-t border-brown/10 pt-6 text-xs text-brown-deep/50 md:flex-row md:items-center">
-          <div>© 2026 Phlavio Allves da Silva Junior — Todos os direitos reservados.</div>
+          <div><span translate="no">© 2026 Phlavio Alves da Silva Junior</span> — Todos os direitos reservados.</div>
           <div>Feito com café ☕ em algum lugar do Brasil.</div>
         </div>
       </div>

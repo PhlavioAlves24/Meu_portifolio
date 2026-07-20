@@ -77,24 +77,40 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Phlavio Allves — Sites e Automações de alta conversão" },
+      { title: "Phlavio Alves — Web Designer & Sites de Alta Conversão" },
       {
         name: "description",
         content:
-          "Desenvolvo sites profissionais, landing pages de alta conversão e automações sob medida para empresas que querem crescer no digital.",
+          "Phlavio Alves cria sites autorais, landing pages e automações de alta conversão para empresas que querem transformar visitas em clientes.",
       },
-      { name: "author", content: "Phlavio Allves da Silva Junior" },
-      { property: "og:title", content: "Phlavio Allves — Sites e Automações de alta conversão" },
+      { name: "author", content: "Phlavio Alves da Silva Junior" },
+      {
+        name: "keywords",
+        content:
+          "Phlavio Alves, web designer, desenvolvedor de sites, landing page, sites de alta conversão, automações, portfólio, Recife",
+      },
+      { name: "robots", content: "index, follow" },
+      { name: "theme-color", content: "#4D392E" },
+      { property: "og:title", content: "Phlavio Alves — Sites de Alta Conversão" },
       {
         property: "og:description",
         content:
-          "Sites de alta conversão entregues com estratégia para gerar clientes, não apenas presença online.",
+          "Sites autorais e estratégicos que transformam visitas em clientes. Portfólio de Phlavio Alves.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://convert-site-lab.lovable.app/" },
+      { property: "og:site_name", content: "Phlavio Alves" },
+      { property: "og:locale", content: "pt_BR" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Phlavio Alves — Sites de Alta Conversão" },
+      {
+        name: "twitter:description",
+        content: "Sites autorais e estratégicos que transformam visitas em clientes.",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "canonical", href: "https://convert-site-lab.lovable.app/" },
       { rel: "icon", type: "image/png", href: "/favicon.png?v=3" },
       { rel: "shortcut icon", href: "/favicon.ico?v=3" },
       { rel: "apple-touch-icon", href: "/favicon.png?v=3" },
@@ -103,6 +119,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@300;400;500;600;700;800&display=swap",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Phlavio Alves",
+          alternateName: "Phlavio Alves da Silva Junior",
+          jobTitle: "Web Designer e Desenvolvedor",
+          url: "https://convert-site-lab.lovable.app/",
+          email: "mailto:thinkingincode5@gmail.com",
+          sameAs: [
+            "https://github.com/PhlavioAlves24",
+            "https://www.instagram.com/thinkingincode.inc/",
+          ],
+        }),
       },
     ],
   }),
@@ -114,7 +148,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>
