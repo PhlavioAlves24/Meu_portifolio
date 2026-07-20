@@ -240,7 +240,7 @@ function Hero() {
               <div className="relative h-full w-full overflow-hidden rounded-[36px] shadow-soft ring-1 ring-black/5">
                 <motion.img
                   src={PHOTO}
-                  alt="Phlavio Allves"
+                  alt="Phlavio Alves"
                   className="mask-organic h-full w-full object-cover"
                   initial={{ scale: 1.15, filter: "blur(20px)" }}
                   animate={{ scale: 1, filter: "blur(0px)" }}
