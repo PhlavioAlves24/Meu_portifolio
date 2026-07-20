@@ -805,23 +805,59 @@ function Counter({
   delay,
 }: { to: number; suffix: string; label: string; delay: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
   const [n, setN] = useState(0);
+  const started = useRef(false);
+
   useEffect(() => {
-    if (!inView) return;
+    const node = ref.current;
+    if (!node) return;
     let raf = 0;
-    const duration = 1800;
-    const start = performance.now() + delay * 1000;
-    const tick = (t: number) => {
-      const elapsed = Math.max(0, t - start);
-      const p = Math.min(1, elapsed / duration);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setN(Math.round(eased * to));
-      if (p < 1) raf = requestAnimationFrame(tick);
+
+    const run = () => {
+      if (started.current) return;
+      started.current = true;
+      const duration = 1600;
+      const startAt = performance.now() + delay * 1000;
+      const tick = (t: number) => {
+        const elapsed = Math.max(0, t - startAt);
+        const p = Math.min(1, elapsed / duration);
+        const eased = 1 - Math.pow(1 - p, 3);
+        setN(Math.round(eased * to));
+        if (p < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, to, delay]);
+
+    // Safety fallback so the number always animates on any device
+    const fallback = window.setTimeout(run, 1500);
+
+    let io: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              run();
+              io?.disconnect();
+              break;
+            }
+          }
+        },
+        { threshold: 0.15 }
+      );
+      io.observe(node);
+    }
+
+    // If already visible on mount, start immediately
+    const rect = node.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) run();
+
+    return () => {
+      window.clearTimeout(fallback);
+      io?.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [to, delay]);
 
   return (
     <motion.div
