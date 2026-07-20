@@ -1103,7 +1103,7 @@ function Footer() {
         <div className="col-span-12 md:col-span-6">
           <div className="flex items-center gap-2">
             <img src={LOGO} alt="Phlavio Alves" loading="lazy" decoding="async" className="h-7 w-7 rounded-full object-cover ring-1 ring-black/10" />
-            <span className="font-display text-xl text-brown-deep">Phlavio Alves</span>
+            <span className="font-display text-xl text-brown-deep" translate="no">Phlavio Alves</span>
           </div>
           <p className="mt-4 max-w-sm text-sm text-brown-deep/60">
             Design autoral e código performático para marcas que se recusam a parecer com todo mundo.
