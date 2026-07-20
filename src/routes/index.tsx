@@ -1102,7 +1102,7 @@ function Footer() {
       <div className="mx-auto grid max-w-7xl grid-cols-12 gap-6 border-t border-brown/10 pt-10">
         <div className="col-span-12 md:col-span-6">
           <div className="flex items-center gap-2">
-            <img src={LOGO} alt="Phlavio Alves" className="h-7 w-7 rounded-full object-cover ring-1 ring-black/10" />
+            <img src={LOGO} alt="Phlavio Alves" loading="lazy" decoding="async" className="h-7 w-7 rounded-full object-cover ring-1 ring-black/10" />
             <span className="font-display text-xl text-brown-deep">Phlavio Alves</span>
           </div>
           <p className="mt-4 max-w-sm text-sm text-brown-deep/60">
