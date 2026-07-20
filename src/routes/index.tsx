@@ -785,12 +785,59 @@ function Stats() {
     { value: 7, suffix: " anos", label: "De experiência" },
     { value: 100, suffix: "%", label: "Clientes recomendam" },
   ];
+
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const trigger = () => setVisible(true);
+
+    // Safety fallback — always trigger after 1.2s
+    const fallback = window.setTimeout(trigger, 1200);
+
+    let io: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              trigger();
+              io?.disconnect();
+              break;
+            }
+          }
+        },
+        { threshold: 0.05, rootMargin: "0px 0px -10% 0px" },
+      );
+      io.observe(node);
+    }
+
+    // If already in the viewport on mount, fire immediately
+    const rect = node.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) trigger();
+
+    return () => {
+      window.clearTimeout(fallback);
+      io?.disconnect();
+    };
+  }, []);
+
   return (
-    <section className="relative px-4 py-16 sm:px-6 md:px-10 md:py-24">
-      <div className="mx-auto max-w-7xl rounded-[24px] surface-beige p-6 sm:p-10 md:rounded-[32px] md:p-16">
+    <section ref={sectionRef} className="relative px-4 py-16 sm:px-6 md:px-10 md:py-24">
+      <div className="mx-auto max-w-7xl overflow-hidden rounded-[24px] surface-beige p-6 sm:p-10 md:rounded-[32px] md:p-16">
         <div className="grid grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4">
           {stats.map((s, i) => (
-            <Counter key={i} to={s.value} suffix={s.suffix} label={s.label} delay={i * 0.1} />
+            <Counter
+              key={i}
+              to={s.value}
+              suffix={s.suffix}
+              label={s.label}
+              delay={i * 0.12}
+              active={visible}
+            />
           ))}
         </div>
       </div>
@@ -803,74 +850,50 @@ function Counter({
   suffix,
   label,
   delay,
-}: { to: number; suffix: string; label: string; delay: number }) {
-  const ref = useRef<HTMLDivElement>(null);
+  active,
+}: {
+  to: number;
+  suffix: string;
+  label: string;
+  delay: number;
+  active: boolean;
+}) {
   const [n, setN] = useState(0);
-  const started = useRef(false);
 
   useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
+    if (!active) return;
     let raf = 0;
-
-    const run = () => {
-      if (started.current) return;
-      started.current = true;
-      const duration = 1600;
-      const startAt = performance.now() + delay * 1000;
-      const tick = (t: number) => {
-        const elapsed = Math.max(0, t - startAt);
-        const p = Math.min(1, elapsed / duration);
-        const eased = 1 - Math.pow(1 - p, 3);
-        setN(Math.round(eased * to));
-        if (p < 1) raf = requestAnimationFrame(tick);
-      };
-      raf = requestAnimationFrame(tick);
+    const duration = 1600;
+    const startAt = performance.now() + delay * 1000;
+    const tick = (t: number) => {
+      const elapsed = Math.max(0, t - startAt);
+      const p = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setN(Math.round(eased * to));
+      if (p < 1) raf = requestAnimationFrame(tick);
     };
-
-    // Safety fallback so the number always animates on any device
-    const fallback = window.setTimeout(run, 1500);
-
-    let io: IntersectionObserver | null = null;
-    if (typeof IntersectionObserver !== "undefined") {
-      io = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            if (e.isIntersecting) {
-              run();
-              io?.disconnect();
-              break;
-            }
-          }
-        },
-        { threshold: 0.15 }
-      );
-      io.observe(node);
-    }
-
-    // If already visible on mount, start immediately
-    const rect = node.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom > 0) run();
-
-    return () => {
-      window.clearTimeout(fallback);
-      io?.disconnect();
-      cancelAnimationFrame(raf);
-    };
-  }, [to, delay]);
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [active, to, delay]);
 
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ delay, duration: 0.6 }}
+      initial={{ opacity: 0, y: 24, scale: 0.94 }}
+      animate={active ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 24, scale: 0.94 }}
+      transition={{ delay, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      className="relative"
     >
-      <div className="font-display text-4xl leading-none text-brown-deep sm:text-5xl md:text-6xl lg:text-7xl">
+      <div className="font-display text-4xl leading-none text-brown-deep sm:text-5xl md:text-6xl lg:text-7xl tabular-nums">
         {n}
         <span className="text-brown-soft">{suffix}</span>
       </div>
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={active ? { scaleX: 1 } : { scaleX: 0 }}
+        transition={{ delay: delay + 0.3, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        style={{ transformOrigin: "left" }}
+        className="mt-3 h-px w-16 bg-brown-deep/30 sm:w-24"
+      />
       <div className="mt-2 text-xs text-brown-deep/60 sm:mt-3 sm:text-sm">{label}</div>
     </motion.div>
   );
