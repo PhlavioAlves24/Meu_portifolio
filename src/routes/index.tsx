@@ -306,7 +306,7 @@ function Hero() {
             transition={{ delay: 1.6, duration: 0.8 }}
             className="mt-6 max-w-lg text-base text-brown-deep/70 md:text-lg"
           >
-            Sou <b>Phlavio Allves</b>, designer e desenvolvedor. Crio sites autorais,
+            Sou <b translate="no">Phlavio Alves</b>, designer e desenvolvedor. Crio sites autorais,
             landing pages de alta conversão e experiências digitais que fazem
             marcas parecerem grandes — desde o primeiro pixel.
           </motion.p>
