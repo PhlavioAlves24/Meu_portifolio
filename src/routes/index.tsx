@@ -506,7 +506,7 @@ function About() {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-soft"
           >
-            <img src={PHOTO} alt="Phlavio Allves retrato" className="h-full w-full object-cover" />
+            <img src={PHOTO} alt="Phlavio Alves retrato" decoding="async" fetchPriority="high" className="h-full w-full object-cover" />
             <div className="absolute inset-x-0 bottom-0 p-5">
               <div className="glass rounded-2xl p-4">
                 <div className="text-[10px] uppercase tracking-[0.3em] text-brown-soft">Founder</div>
@@ -672,7 +672,7 @@ function ProjectCard({
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="none"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-brown-deep/20 via-transparent to-transparent opacity-70" />
@@ -805,23 +805,59 @@ function Counter({
   delay,
 }: { to: number; suffix: string; label: string; delay: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
   const [n, setN] = useState(0);
+  const started = useRef(false);
+
   useEffect(() => {
-    if (!inView) return;
+    const node = ref.current;
+    if (!node) return;
     let raf = 0;
-    const duration = 1800;
-    const start = performance.now() + delay * 1000;
-    const tick = (t: number) => {
-      const elapsed = Math.max(0, t - start);
-      const p = Math.min(1, elapsed / duration);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setN(Math.round(eased * to));
-      if (p < 1) raf = requestAnimationFrame(tick);
+
+    const run = () => {
+      if (started.current) return;
+      started.current = true;
+      const duration = 1600;
+      const startAt = performance.now() + delay * 1000;
+      const tick = (t: number) => {
+        const elapsed = Math.max(0, t - startAt);
+        const p = Math.min(1, elapsed / duration);
+        const eased = 1 - Math.pow(1 - p, 3);
+        setN(Math.round(eased * to));
+        if (p < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, to, delay]);
+
+    // Safety fallback so the number always animates on any device
+    const fallback = window.setTimeout(run, 1500);
+
+    let io: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              run();
+              io?.disconnect();
+              break;
+            }
+          }
+        },
+        { threshold: 0.15 }
+      );
+      io.observe(node);
+    }
+
+    // If already visible on mount, start immediately
+    const rect = node.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) run();
+
+    return () => {
+      window.clearTimeout(fallback);
+      io?.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [to, delay]);
 
   return (
     <motion.div
@@ -1066,7 +1102,7 @@ function Footer() {
       <div className="mx-auto grid max-w-7xl grid-cols-12 gap-6 border-t border-brown/10 pt-10">
         <div className="col-span-12 md:col-span-6">
           <div className="flex items-center gap-2">
-            <img src={LOGO} alt="Phlavio Alves" className="h-7 w-7 rounded-full object-cover ring-1 ring-black/10" />
+            <img src={LOGO} alt="Phlavio Alves" loading="lazy" decoding="async" className="h-7 w-7 rounded-full object-cover ring-1 ring-black/10" />
             <span className="font-display text-xl text-brown-deep">Phlavio Alves</span>
           </div>
           <p className="mt-4 max-w-sm text-sm text-brown-deep/60">
