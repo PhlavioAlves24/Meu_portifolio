@@ -1126,7 +1126,7 @@ function Footer() {
           </ul>
         </div>
         <div className="col-span-12 mt-8 flex flex-col items-start justify-between gap-3 border-t border-brown/10 pt-6 text-xs text-brown-deep/50 md:flex-row md:items-center">
-          <div>© 2026 Phlavio Allves da Silva Junior — Todos os direitos reservados.</div>
+          <div><span translate="no">© 2026 Phlavio Alves da Silva Junior</span> — Todos os direitos reservados.</div>
           <div>Feito com café ☕ em algum lugar do Brasil.</div>
         </div>
       </div>
