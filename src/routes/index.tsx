@@ -241,10 +241,13 @@ function Hero() {
                 <motion.img
                   src={PHOTO}
                   alt="Phlavio Alves"
+                  decoding="async"
+                  fetchPriority="high"
                   className="mask-organic h-full w-full object-cover"
-                  initial={{ scale: 1.15, filter: "blur(20px)" }}
-                  animate={{ scale: 1, filter: "blur(0px)" }}
-                  transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+                  initial={{ scale: 1.08, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ willChange: "transform, opacity", imageRendering: "auto" }}
                 />
               </div>
             </motion.div>
@@ -500,10 +503,10 @@ function About() {
 
         <div className="col-span-12 md:col-span-4 md:col-start-8">
           <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0.95, filter: "blur(12px)" }}
-            whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+            initial={{ opacity: 0, y: 40, scale: 0.96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-soft"
           >
             <img src={PHOTO} alt="Phlavio Alves retrato" decoding="async" fetchPriority="high" className="h-full w-full object-cover" />
@@ -1163,10 +1166,10 @@ function Footer() {
 function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>
