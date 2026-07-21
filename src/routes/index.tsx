@@ -675,7 +675,9 @@ function ProjectCard({
           muted
           loop
           playsInline
-          preload="none"
+          autoPlay
+          preload="metadata"
+          onLoadedMetadata={(e) => e.currentTarget.play().catch(() => {})}
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-brown-deep/20 via-transparent to-transparent opacity-70" />
