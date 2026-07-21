@@ -241,10 +241,13 @@ function Hero() {
                 <motion.img
                   src={PHOTO}
                   alt="Phlavio Alves"
+                  decoding="async"
+                  fetchPriority="high"
                   className="mask-organic h-full w-full object-cover"
-                  initial={{ scale: 1.15, filter: "blur(20px)" }}
-                  animate={{ scale: 1, filter: "blur(0px)" }}
-                  transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+                  initial={{ scale: 1.08, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ willChange: "transform, opacity", imageRendering: "auto" }}
                 />
               </div>
             </motion.div>
