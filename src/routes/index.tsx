@@ -503,10 +503,10 @@ function About() {
 
         <div className="col-span-12 md:col-span-4 md:col-start-8">
           <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0.95, filter: "blur(12px)" }}
-            whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+            initial={{ opacity: 0, y: 40, scale: 0.96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="relative aspect-[4/5] overflow-hidden rounded-[32px] shadow-soft"
           >
             <img src={PHOTO} alt="Phlavio Alves retrato" decoding="async" fetchPriority="high" className="h-full w-full object-cover" />
